@@ -1,0 +1,85 @@
+# If getServer().getVersion() contains any of these strings, it will use a different way of
+# registering the recipes which only works on 1.11 or below.
+VersionCheck:
+  - 'MC: 1.11'
+  - '1.11.2'
+
+# Hopefully fixes whatever this is caused by: https://i.imgur.com/QLqYAn9.gifv
+UpdateInventoryOnCancel: true
+
+Items:
+
+  # Unique name,does not matter what it is, as long as its unique. especially important in 1.12+
+  RottenCookie:
+
+    # Permission to craft this item
+    Permission: 'custom.food.rottencookie'
+
+    # The Item that will be crafted.
+    ResultItem:
+
+      # Material of the item. List of all materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+      Material: COOKIE
+
+      # The amount of items you get when crafting this
+      Amount: 2
+
+      # Name of the item
+      Name: '&6Rotten Cookie'
+
+      # Lore of the item
+      Lore:
+        - '&7Rot IX'
+
+      # ENCHANTMENT,LEVEL List of all enchantments: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/enchantments/Enchantment.html
+      Enchantments:
+        - 'DURABILITY,0'
+
+      # ItemFlags. List of all ItemFlags: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/inventory/ItemFlag.html
+      ItemFlags:
+        - 'HIDE_ENCHANTS'
+
+    # Remove for shapeless recipe. Switch the Letters under ingredients with numbers instead of letters, for the amount.
+    # Don't want the item to be craftable? Remove both Shape and Ingredients.
+    Shape: ' C ,BAB, C '
+
+    # Examples:
+    # Shaped: A:PUMPKIN<:optional damage value>
+    # Shapeless: 2:PUMPKIN<:optional damage value>
+    # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK:3 as A:INK_SACK:3
+    Ingredients:
+      - 'A:INK_SACK:3'
+      - 'B:WHEAT'
+      - 'C:ROTTEN_FLESH'
+
+    # List of actions for when the item is consumed.
+    # Available Actions:
+    # Potion Effect: 'PE:<PotionEffectType>:<Duration In Ticks>:<Amplifier>' (Adds the specified potion effect to the player) List of all potion effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
+    # Cancel Event: 'CE' (Means the item does not get consumed, and does not restore hunger)
+    # Extra Food: 'EF:<amount>' (The amount of extra food to restore, 2 = 1 full thing on the hunger bar)
+    # Extra Saturation: 'ES:<amount>'
+    # there is only 4 effects for now, but more can be added if wanted.
+    # Most of the actions can also be delayed, except Cancel Event. Set up like this: '<Action Prefix>-<Wanted Delay In Ticks>:<rest of the action>'
+    # Example: 'PE-2:SLOW:200:0' delays the giving of potion effect SLOW by 2 ticks.
+    OnConsume:
+      - 'PE:CONFUSION:200:0'
+      - 'PE:SLOW:100:0'
+      - 'CE'
+      - 'EF:4'
+      - 'ES:6'
+
+
+Messages:
+  NoPermission: '&4You do not have permission to do that.'
+  UnknownCommand: '&4Unknown command. Try /citems for a list of commands.'
+  Commands:
+    List:
+      Items: '&aAvailable Items:'
+    Get:
+      Usage: '&cIncorrect usage. Try: /citems get <item name> <amount>'
+      ItemError: '&cThat item does not exist.'
+      Received: '&aYou''ve received %amount% %item%'
+    Help:
+      - '&aCommands:'
+      - '&a/citem get <item> <amount> &7- Gives you <amount> of <item>'
+      - '&a/citem list &7- Lists all items'

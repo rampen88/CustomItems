@@ -1,0 +1,18 @@
+name: CustomItems
+version: ${project.version}
+author: rampen88
+main: me.rampen88.customitems.CustomItems
+commands:
+  citems:
+    description: Its a command.
+    aliases: [citem, customitem, customitems]
+permissions:
+   custom.items.help:
+     description: gives access to /citems help
+     default: op
+   custom.items.list:
+     description: gives access to /citems list
+     default: op
+   custom.items.get:
+     description: gives access to /citems get
+     default: op
