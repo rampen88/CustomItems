@@ -10,6 +10,7 @@ public class SimpleItem {
 
 
 	private ItemActionSet consumeActions;
+	private ItemActionSet clickActions;
 	private ItemStack item;
 	private String permission;
 	private String name;
@@ -32,8 +33,16 @@ public class SimpleItem {
 		this.consumeActions = consumeActions;
 	}
 
+	void setClickActions(ItemActionSet clickActions){
+		this.clickActions = clickActions;
+	}
+
 	public boolean itemConsumed(Player p){
-		return consumeActions.triggerAll(p);
+		return consumeActions != null && consumeActions.triggerAll(p);
+	}
+
+	public boolean itemClicked(Player p){
+		return clickActions != null && clickActions.triggerAll(p);
 	}
 
 	public ItemStack getItem() {

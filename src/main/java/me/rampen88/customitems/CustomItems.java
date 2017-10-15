@@ -27,25 +27,23 @@ public class CustomItems extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		// Save config with comments.
 		saveDefaultConfig();
 
 		miscUtil = new MiscUtil(this);
 
-		// Get list of versions to check, and make sure its not null.
 		List<String> versionsToCheck = getConfig().getStringList("VersionCheck");
 		if(versionsToCheck == null) versionsToCheck = Collections.singletonList("MC: 1.11");
 
 		String version = getServer().getVersion();
 
-		// Check which RecipeCreator to use.
 		for(String s : versionsToCheck){
 			if(version.contains(s)){
 				recipeCreator = new RecipeCreator(this);
 				break;
 			}
 		}
-		if(recipeCreator == null) recipeCreator = new KeyRecipeCreator(this);
+		if(recipeCreator == null)
+			recipeCreator = new KeyRecipeCreator(this);
 
 		craftingMaster = new ItemMaster(this);
 

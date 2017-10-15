@@ -56,8 +56,9 @@ Items:
     # Available Actions:
     # Potion Effect: 'PE:<PotionEffectType>:<Duration In Ticks>:<Amplifier>' (Adds the specified potion effect to the player) List of all potion effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
     # Cancel Event: 'CE' (Means the item does not get consumed, and does not restore hunger)
-    # Extra Food: 'EF:<amount>' (The amount of extra food to restore, 2 = 1 full thing on the hunger bar)
+    # Extra Food: 'EF:<amount>' (The amount of extra food to restore)
     # Extra Saturation: 'ES:<amount>'
+    # Remove Item: 'RI:<amount>' (If it fails to remove the item(s), all effects AFTER this is in the list will not be triggered.)
     # there is only 4 effects for now, but more can be added if wanted.
     # Most of the actions can also be delayed, except Cancel Event. Set up like this: '<Action Prefix>-<Wanted Delay In Ticks>:<rest of the action>'
     # Example: 'PE-2:SLOW:200:0' delays the giving of potion effect SLOW by 2 ticks.
@@ -67,19 +68,28 @@ Items:
       - 'CE'
       - 'EF:4'
       - 'ES:6'
-
+    # Same as OnConsume, Except Cancel Event does nothing if the player is clicking in the air.
+    OnClick:
+      - 'RI:1'
+      - 'PE:SLOW:300:1'
 
 Messages:
-  NoPermission: '&4You do not have permission to do that.'
-  UnknownCommand: '&4Unknown command. Try /citems for a list of commands.'
+  NoPermission: "&4You do not have permission to do that."
+  UnknownCommand: "&4Unknown command. Try /citems for a list of commands."
   Commands:
+    ItemError: "&cThat item does not exist."
+    NotANumber: "&cThat's not a number."
+    Received: "&aYou've received %amount% %item%"
     List:
-      Items: '&aAvailable Items:'
+      Items: "&aAvailable Items:"
     Get:
-      Usage: '&cIncorrect usage. Try: /citems get <item name> <amount>'
-      ItemError: '&cThat item does not exist.'
-      Received: '&aYou''ve received %amount% %item%'
+      Usage: "&cIncorrect usage. Try: /citem get <item name> <amount>"
+    Give:
+      Usage: "&cIncorrect usage. Try: /citem give <player> <item name> <amount>"
+      NotOnline: "&c%player% is not online."
+      Success: "&a%player% has received %amount% %item%"
     Help:
-      - '&aCommands:'
-      - '&a/citem get <item> <amount> &7- Gives you <amount> of <item>'
-      - '&a/citem list &7- Lists all items'
+      - "&aCommands:"
+      - "&a/citem get <item> <amount> &7- Gives you <amount> of <item>"
+      - "&a/citem give <player> <item> <amount> &7- Gives an item to player."
+      - "&a/citem list &7- Lists all items"

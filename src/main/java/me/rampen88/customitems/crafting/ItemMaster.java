@@ -35,7 +35,6 @@ public class ItemMaster {
 		for(String s : items.getKeys(false)){
 
 			ConfigurationSection section = items.getConfigurationSection(s);
-
 			ItemStack item = loadItem(section.getConfigurationSection("ResultItem"));
 
 			SimpleItem simpleItem = new SimpleItem(item, section);
@@ -50,10 +49,13 @@ public class ItemMaster {
 			}
 
 			List<String> consumeActions = section.getStringList("OnConsume");
-			if(consumeActions != null) simpleItem.setConsumeActions(new ItemActionSet(plugin, consumeActions));
+			List<String> clickActions = section.getStringList("OnClick");
+			if(consumeActions != null)
+				simpleItem.setConsumeActions(new ItemActionSet(plugin, consumeActions, item));
 
+			if(clickActions != null)
+				simpleItem.setClickActions(new ItemActionSet(plugin, clickActions, item));
 		}
-
 	}
 
 	public Set<SimpleItem> getAllItems(){

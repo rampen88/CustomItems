@@ -4,6 +4,7 @@ import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.crafting.ItemMaster;
 import me.rampen88.customitems.crafting.SimpleItem;
 import me.rampen88.customitems.util.MiscUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,30 +29,32 @@ public class CitemsCommand implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
 		if(args.length < 1){
-
 			helpCommand(commandSender);
 			return true;
-
 		}else{
 			switch (args[0].toLowerCase()){
 				case "list":
-					if(!util.hasPerm(commandSender, "custom.items.list", false)) return true;
+					if(!util.hasPerm(commandSender, "custom.items.list", false))
+						break;
 
 					listCommand(commandSender);
 					break;
-
 				case "get":
-					if(!util.hasPerm(commandSender, "custom.items.get", true)) return true;
+					if(!util.hasPerm(commandSender, "custom.items.get", false))
+						break;
 
 					// Util hasPerm checks if commandSender is player, so it should be safe to cast.
 					getCommand((Player) commandSender, args);
 					break;
+				case "give":
+					if(!util.hasPerm(commandSender, "custom.items.give", false))
+						break;
 
+					giveCommand(commandSender, args);
+					break;
 				case "help":
-
 					helpCommand(commandSender);
 					break;
-
 				default:
 					commandSender.sendMessage(util.getMessage("UnknownCommand"));
 					break;
@@ -76,16 +79,19 @@ public class CitemsCommand implements CommandExecutor{
 			target.sendMessage(util.getMessage("Commands.Get.Usage"));
 			return;
 		}
+		giveItem(target, target, args[1], args[2], false);
+	}
 
-		SimpleItem item = itemMaster.getItemByName(args[1]);
+	private void giveItem(CommandSender sender, Player target, String itemName, String amountString, boolean sendMessageToSender){
+		SimpleItem item = itemMaster.getItemByName(itemName);
 		if(item == null){
-			target.sendMessage("Commands.Get.ItemError");
+			sender.sendMessage(util.getMessage("Commands.ItemError"));
 			return;
 		}
 
-		Integer amount = util.parseInt(args[2]);
+		Integer amount = util.parseInt(amountString);
 		if(amount == null){
-			target.sendMessage("Commands.Get.Usage");
+			sender.sendMessage(util.getMessage("Commands.NotANumber"));
 			return;
 		}
 
@@ -93,11 +99,26 @@ public class CitemsCommand implements CommandExecutor{
 		itemStack.setAmount(amount);
 
 		target.getInventory().addItem(itemStack);
-		target.sendMessage(util.getMessage("Commands.Get.Received").replace("%amount%", amount.toString()).replace("%item%", item.getName()));
+		target.sendMessage(util.getMessage("Commands.Received").replace("%amount%", amount.toString()).replace("%item%", item.getName()));
+		if(sendMessageToSender)
+			sender.sendMessage(util.getMessage("Commands.Give.Success").replace("%amount%", amount.toString()).replace("%item%", item.getName()).replace("%player%", target.getName()));
+	}
+
+	private void giveCommand(CommandSender sender, String[] args){
+		if(args.length < 4){
+			sender.sendMessage(util.getMessage("Commands.Give.Usage"));
+			return;
+		}
+
+		Player player = Bukkit.getPlayer(args[1]);
+		if(player == null){
+			sender.sendMessage(util.getMessage("Commands.Give.NotOnline").replace("%player%", args[1]));
+			return;
+		}
+		giveItem(sender, player, args[2], args[3], true);
 	}
 
 	private void listCommand(CommandSender target){
-
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// Append all item names in the StringBuilder, then remove the last ", "
@@ -106,7 +127,5 @@ public class CitemsCommand implements CommandExecutor{
 
 		target.sendMessage(util.getMessage("Commands.List.Items"));
 		target.sendMessage(stringBuilder.toString());
-
 	}
-
 }

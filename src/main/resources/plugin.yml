@@ -16,3 +16,6 @@ permissions:
    custom.items.get:
      description: gives access to /citems get
      default: op
+   custom.items.give:
+     description: gives access to /citems give
+     default: op
