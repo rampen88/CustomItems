@@ -27,7 +27,7 @@ public class RemoveItemAction implements ItemAction{
 	private void attemptRemoveItems(PlayerInventory inventory){
 		ItemStack[] contents = inventory.getStorageContents();
 		removeItems(contents);
-		inventory.setContents(contents);
+		inventory.setStorageContents(contents);
 	}
 
 	private void removeItems(ItemStack[] contents){

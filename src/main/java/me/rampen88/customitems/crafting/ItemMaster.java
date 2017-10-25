@@ -88,7 +88,6 @@ public class ItemMaster {
 			return null;
 		}
 
-
 		String name = section.getString("Name");
 		int damage = section.getInt("Damage", 0);
 		int amount = section.getInt("Amount", 1);

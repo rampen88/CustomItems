@@ -26,6 +26,7 @@ public class CitemsCommand implements CommandExecutor{
 		util = plugin.getMiscUtil();
 	}
 
+	// TODO: add command to get 1 of each item.
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
 		if(args.length < 1){
@@ -120,6 +121,7 @@ public class CitemsCommand implements CommandExecutor{
 
 	private void listCommand(CommandSender target){
 		StringBuilder stringBuilder = new StringBuilder();
+
 
 		// Append all item names in the StringBuilder, then remove the last ", "
 		itemMaster.getAllItems().forEach(i -> stringBuilder.append(i.getName()).append(", "));

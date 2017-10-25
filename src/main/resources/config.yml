@@ -9,7 +9,7 @@ UpdateInventoryOnCancel: true
 
 Items:
 
-  # Unique name,does not matter what it is, as long as its unique. especially important in 1.12+
+  # Unique name, does not matter what it is, as long as its unique.
   RottenCookie:
 
     # Permission to craft this item
