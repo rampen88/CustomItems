@@ -53,15 +53,25 @@ Items:
       - 'C:ROTTEN_FLESH'
 
     # List of actions for when the item is consumed.
+    #
     # Available Actions:
-    # Potion Effect: 'PE:<PotionEffectType>:<Duration In Ticks>:<Amplifier>' (Adds the specified potion effect to the player) List of all potion effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
+    # Potion Effect: 'PE:<PotionEffectType>:<Duration In Ticks>:<Amplifier>' (Adds the specified potion effect to the player)
     # Cancel Event: 'CE' (Means the item does not get consumed, and does not restore hunger)
     # Extra Food: 'EF:<amount>' (The amount of extra food to restore)
     # Extra Saturation: 'ES:<amount>'
     # Remove Item: 'RI:<amount>' (If it fails to remove the item(s), all effects AFTER this is in the list will not be triggered.)
-    # there is only 4 effects for now, but more can be added if wanted.
+    # Particle Trail: 'PT:<Particle>:<ParticleAmount>:<OffsetX>:<OffsetY>:<OffsetZ>:<Delay>:<Optional: TimesToPlay>' (Don't include TimesToPlay for it to run until the player reactivates the item, or leaves the server. Can only have 1 running at a time, for now)
+    # Effect Trail: 'ET:<Effect>:<Data>:<OffsetX>:<OffsetY>:<OffsetZ>:<Delay>' (Can only have 1 running at a time, shared with Particle Trail)
+    # Message Player: 'MP:<Message>' (Placeholders: %player% for the player name.)
+    # Play Sound: 'PS:<Sound>:<Volume>:<Pitch>'
+    #
     # Most of the actions can also be delayed, except Cancel Event. Set up like this: '<Action Prefix>-<Wanted Delay In Ticks>:<rest of the action>'
     # Example: 'PE-2:SLOW:200:0' delays the giving of potion effect SLOW by 2 ticks.
+    #
+    # Potion Effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
+    # Sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+    # Particles: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
+    # Effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Effect.htm
     OnConsume:
       - 'PE:CONFUSION:200:0'
       - 'PE:SLOW:100:0'

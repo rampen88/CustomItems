@@ -3,6 +3,7 @@ package me.rampen88.customitems;
 import me.rampen88.customitems.commands.CitemsCommand;
 import me.rampen88.customitems.crafting.ItemMaster;
 import me.rampen88.customitems.listener.ItemListener;
+import me.rampen88.customitems.listener.ParticleHandler;
 import me.rampen88.customitems.recipe.KeyRecipeCreator;
 import me.rampen88.customitems.recipe.RecipeCreator;
 import me.rampen88.customitems.util.ItemBuilder;
@@ -32,7 +33,8 @@ public class CustomItems extends JavaPlugin {
 		miscUtil = new MiscUtil(this);
 
 		List<String> versionsToCheck = getConfig().getStringList("VersionCheck");
-		if(versionsToCheck == null) versionsToCheck = Collections.singletonList("MC: 1.11");
+		if(versionsToCheck == null)
+			versionsToCheck = Collections.singletonList("MC: 1.11");
 
 		String version = getServer().getVersion();
 
@@ -55,6 +57,7 @@ public class CustomItems extends JavaPlugin {
 		PluginManager pluginManager = getServer().getPluginManager();
 
 		pluginManager.registerEvents(new ItemListener(this, craftingMaster), this);
+		pluginManager.registerEvents(new ParticleHandler(this), this);
 	}
 
 	private void registerCommands(){

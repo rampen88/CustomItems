@@ -19,13 +19,28 @@ public class MiscUtil {
 
 	public Integer parseInt(String input){
 		try{
-
 			return Integer.valueOf(input);
-
 		}catch (NumberFormatException ignored){
 			plugin.getLogger().info(input + " is not a valid number!");
 		}
+		return null;
+	}
 
+	public Double parseDouble(String input){
+		try{
+			return Double.valueOf(input);
+		}catch (NumberFormatException ignored){
+			plugin.getLogger().info(input + " is not a valid number!");
+		}
+		return null;
+	}
+
+	public <T extends Enum<T>> T valueOf(String toParse, String errorMessage, Class<T> clazz){
+		try{
+			return T.valueOf(clazz, toParse);
+		}catch (IllegalArgumentException | NullPointerException e){
+			plugin.getLogger().info(errorMessage);
+		}
 		return null;
 	}
 

@@ -122,7 +122,6 @@ public class CitemsCommand implements CommandExecutor{
 	private void listCommand(CommandSender target){
 		StringBuilder stringBuilder = new StringBuilder();
 
-
 		// Append all item names in the StringBuilder, then remove the last ", "
 		itemMaster.getAllItems().forEach(i -> stringBuilder.append(i.getName()).append(", "));
 		stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());

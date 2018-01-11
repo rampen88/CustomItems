@@ -2,6 +2,10 @@ package me.rampen88.customitems.actions;
 
 import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.exceptions.CancelActionsException;
+import org.bukkit.ChatColor;
+import org.bukkit.Effect;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -9,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 public class ItemActionSet {
 
@@ -61,6 +66,18 @@ public class ItemActionSet {
 					break;
 				case "RI":
 					toAdd = getRemoveItemAction(action, item);
+					break;
+				case "PT":
+					toAdd = getParticleAction(action);
+					break;
+				case "ET":
+					toAdd = getEffectAction(action);
+					break;
+				case "MP":
+					toAdd = getMessageAction(action);
+					break;
+				case "PS":
+					toAdd = getSoundAction(action);
 					break;
 				default:
 					plugin.getLogger().info("Unknown item action: " + action[0]);
@@ -136,6 +153,75 @@ public class ItemActionSet {
 		if(amplifier == null) return null;
 
 		return new PotionEffectAction(type, duration, amplifier);
+	}
+
+	private ItemAction getParticleAction(String[] args){
+		if(args.length < 7){
+			plugin.getLogger().info("Invalid particle trail, missing arguments");
+			return null;
+		}
+
+		Particle particle = plugin.getMiscUtil().valueOf(args[1], args[1] + " is not a valid particle", Particle.class);
+		Integer amount = plugin.getMiscUtil().parseInt(args[2]);
+		Double offX = plugin.getMiscUtil().parseDouble(args[3]);
+		Double offY = plugin.getMiscUtil().parseDouble(args[4]);
+		Double offZ = plugin.getMiscUtil().parseDouble(args[5]);
+		Integer delay = plugin.getMiscUtil().parseInt(args[6]);
+		Integer timesToPlay = args.length > 7 ? plugin.getMiscUtil().parseInt(args[7]) : 0;
+		if(particle == null || amount == null || offX == null || offY == null || offZ == null || delay == null){
+			return null;
+		}
+
+		return new ParticleAction(particle, amount, offX, offY, offZ, delay, timesToPlay);
+	}
+
+	// TODO: Don't be lazy
+	private ItemAction getEffectAction(String[] args){
+		if(args.length < 7){
+			plugin.getLogger().info("Invalid effect trail, missing arguments");
+			return null;
+		}
+
+		Effect effect = plugin.getMiscUtil().valueOf(args[1], args[1] + " is not a valid effect", Effect.class);
+		Integer data = plugin.getMiscUtil().parseInt(args[2]);
+		Double offX = plugin.getMiscUtil().parseDouble(args[3]);
+		Double offY = plugin.getMiscUtil().parseDouble(args[4]);
+		Double offZ = plugin.getMiscUtil().parseDouble(args[5]);
+		Integer delay = plugin.getMiscUtil().parseInt(args[6]);
+		if(effect == null || data == null || offX == null || offY == null || offZ == null || delay == null){
+			return null;
+		}
+
+		return new EffectAction(effect, data, offX, offY, offZ, delay);
+	}
+
+
+	private ItemAction getMessageAction(String[] args){
+		if(args.length < 2){
+			plugin.getLogger().info("Invalid message, missing arguments");
+			return null;
+		}
+
+		StringJoiner stringJoiner = new StringJoiner(":");
+		for (int i = 1; i < args.length; i++) {
+			stringJoiner.add(args[i]);
+		}
+		String message = stringJoiner.toString();
+		message = ChatColor.translateAlternateColorCodes('&', message);
+		return new MessageAction(message);
+	}
+
+	private ItemAction getSoundAction(String[] args){
+		if(args.length < 4){
+			plugin.getLogger().info("Invalid sound, missing arguments");
+			return null;
+		}
+
+		Sound sound = plugin.getMiscUtil().valueOf(args[1], args[1] + " is not a valid sound", Sound.class);
+		double volume = plugin.getMiscUtil().parseDouble(args[2]);
+		double pitch  = plugin.getMiscUtil().parseDouble(args[3]);
+
+		return new SoundAction(sound, (float) volume, (float)pitch);
 	}
 
 }
