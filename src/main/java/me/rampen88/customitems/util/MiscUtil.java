@@ -76,4 +76,13 @@ public class MiscUtil {
 		return list;
 	}
 
+	public static int countCharInString(char key, String string){
+		int total = 0;
+		for (char c : string.toCharArray()) {
+			if(c == key)
+				total++;
+		}
+		return total;
+	}
+
 }

@@ -2,7 +2,7 @@ package me.rampen88.customitems.actions;
 
 import org.bukkit.entity.Player;
 
-public class ExtraFoodAction implements ItemAction{
+public class ExtraFoodAction implements ItemAction {
 
 	private int amount;
 

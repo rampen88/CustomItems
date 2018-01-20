@@ -23,13 +23,12 @@ public class CustomItems extends JavaPlugin {
 	private static ItemBuilder itemBuilder = new ItemBuilder();
 
 	private RecipeCreator recipeCreator;
-	private ItemMaster craftingMaster;
+	private ItemMaster itemMaster;
 	private MiscUtil miscUtil;
 
 	@Override
 	public void onEnable() {
 		saveDefaultConfig();
-
 		miscUtil = new MiscUtil(this);
 
 		List<String> versionsToCheck = getConfig().getStringList("VersionCheck");
@@ -47,7 +46,8 @@ public class CustomItems extends JavaPlugin {
 		if(recipeCreator == null)
 			recipeCreator = new KeyRecipeCreator(this);
 
-		craftingMaster = new ItemMaster(this);
+		itemMaster = new ItemMaster(this, miscUtil);
+		itemMaster.loadItems();
 
 		registerListeners();
 		registerCommands();
@@ -56,13 +56,13 @@ public class CustomItems extends JavaPlugin {
 	private void registerListeners(){
 		PluginManager pluginManager = getServer().getPluginManager();
 
-		pluginManager.registerEvents(new ItemListener(this, craftingMaster), this);
+		pluginManager.registerEvents(new ItemListener(this, itemMaster), this);
 		pluginManager.registerEvents(new ParticleHandler(this), this);
 	}
 
 	private void registerCommands(){
 		PluginCommand citems = getCommand("citems");
-		citems.setExecutor(new CitemsCommand(this, craftingMaster));
+		citems.setExecutor(new CitemsCommand(this, itemMaster));
 		citems.setAliases(Arrays.asList("citem","customitem","customitems"));
 	}
 
@@ -83,4 +83,7 @@ public class CustomItems extends JavaPlugin {
 		return itemBuilder;
 	}
 
+	public ItemMaster getItemMaster() {
+		return itemMaster;
+	}
 }

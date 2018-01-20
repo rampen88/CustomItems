@@ -10,8 +10,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,15 +30,32 @@ public class ItemListener implements Listener{
 	@EventHandler(ignoreCancelled = true)
 	public void onCraftItem(CraftItemEvent e){
 		ItemStack item = e.getRecipe().getResult();
-		if(item == null) return;
+		if(item == null)
+			return;
 
 		SimpleItem simpleItem = craftingMaster.getItem(item);
-		if(simpleItem == null) return;
+		if(simpleItem == null)
+			return;
 
-		if(!simpleItem.hasPermission(e.getWhoClicked())){
+		if(!simpleItem.hasPermission(e.getWhoClicked()) || !simpleItem.canCraft(e.getInventory().getMatrix())){
 			e.setCancelled(true);
 			if(attemptUpdateInv){
 				((Player)e.getWhoClicked()).updateInventory();
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onCraftPrepare(PrepareItemCraftEvent event){
+		if(event.getRecipe() == null || event.getRecipe().getResult() == null)
+			return;
+
+		SimpleItem item = craftingMaster.getItem(event.getRecipe().getResult());
+		if(item != null){
+			CraftingInventory craftingInventory = event.getInventory();
+			ItemStack[] items = craftingInventory.getMatrix();
+			if(!item.canCraft(items)){
+				craftingInventory.setResult(null);
 			}
 		}
 	}
@@ -51,10 +70,7 @@ public class ItemListener implements Listener{
 			return;
 
 		SimpleItem simpleItem = craftingMaster.getItem(heldItem);
-		if(simpleItem == null)
-			return;
-
-		if(simpleItem.itemClicked(event.getPlayer())){
+		if(simpleItem != null && simpleItem.itemClicked(event.getPlayer())) {
 			event.setCancelled(true);
 		}
 	}
@@ -66,14 +82,9 @@ public class ItemListener implements Listener{
 			return;
 
 		SimpleItem simpleItem = craftingMaster.getItem(item);
-		if(simpleItem == null)
-			return;
-
-		if(simpleItem.itemConsumed(e.getPlayer())){
+		if(simpleItem != null && simpleItem.itemConsumed(e.getPlayer())) {
 			e.setCancelled(true);
 		}
-
 	}
-
 
 }

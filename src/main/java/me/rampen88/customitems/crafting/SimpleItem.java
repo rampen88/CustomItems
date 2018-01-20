@@ -8,7 +8,6 @@ import org.bukkit.permissions.Permissible;
 
 public class SimpleItem {
 
-
 	private ItemActionSet consumeActions;
 	private ItemActionSet clickActions;
 	private ItemStack item;
@@ -25,7 +24,7 @@ public class SimpleItem {
 		return permission == null || p.hasPermission(permission);
 	}
 
-	boolean isSimilar(ItemStack item){
+	public boolean isSimilar(ItemStack item){
 		return this.item.isSimilar(item);
 	}
 
@@ -52,4 +51,9 @@ public class SimpleItem {
 	public String getName() {
 		return name;
 	}
+
+	public boolean canCraft(ItemStack[] itemMatrix){
+		return true;
+	}
+
 }

@@ -4,7 +4,7 @@ import me.rampen88.customitems.exceptions.CancelActionsException;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-public class SoundAction implements ItemAction{
+public class SoundAction implements ItemAction {
 
 	private Sound sound;
 	private float volume;

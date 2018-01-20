@@ -4,7 +4,7 @@ import me.rampen88.customitems.CustomItems;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class DelayedItemAction implements ItemAction{
+public class DelayedItemAction implements ItemAction {
 
 	private CustomItems plugin;
 	private ItemAction toDelay;

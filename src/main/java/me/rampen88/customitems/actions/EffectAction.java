@@ -4,7 +4,7 @@ import me.rampen88.customitems.actions.particle.Playable;
 import me.rampen88.customitems.actions.particle.PlayableEffect;
 import org.bukkit.Effect;
 
-public class EffectAction extends PlayableAction{
+public class EffectAction extends PlayableAction {
 
 	private Effect effect;
 

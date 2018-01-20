@@ -46,6 +46,13 @@ Items:
     # Examples:
     # Shaped: A:PUMPKIN<:optional damage value>
     # Shapeless: 2:PUMPKIN<:optional damage value>
+    #
+    # Using custom items in recipes:
+    # Examples:
+    # Shaped: 'A:CI-<ItemName>'
+    # Shapeless: '2:CI-<ItemName>'
+    # The custom item you use in the recipe has to be above the item which requires it in the config!
+    #
     # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK:3 as A:INK_SACK:3
     Ingredients:
       - 'A:INK_SACK:3'
@@ -65,20 +72,20 @@ Items:
     # Message Player: 'MP:<Message>' (Placeholders: %player% for the player name.)
     # Play Sound: 'PS:<Sound>:<Volume>:<Pitch>'
     #
-    # Most of the actions can also be delayed, except Cancel Event. Set up like this: '<Action Prefix>-<Wanted Delay In Ticks>:<rest of the action>'
-    # Example: 'PE-2:SLOW:200:0' delays the giving of potion effect SLOW by 2 ticks.
-    #
     # Potion Effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
     # Sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
     # Particles: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html
     # Effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Effect.htm
+    #
+    # Most of the actions can also be delayed, except Cancel Event. Set up like this: '<Action Prefix>-<Wanted Delay In Ticks>:<rest of the action>'
+    # Example: 'PE-2:SLOW:200:0' delays the giving of potion effect SLOW by 2 ticks.
     OnConsume:
       - 'PE:CONFUSION:200:0'
       - 'PE:SLOW:100:0'
       - 'CE'
       - 'EF:4'
       - 'ES:6'
-    # Same as OnConsume, Except Cancel Event does nothing if the player is clicking in the air.
+    # Same as OnConsume.
     OnClick:
       - 'RI:1'
       - 'PE:SLOW:300:1'

@@ -5,7 +5,7 @@ import me.rampen88.customitems.exceptions.CancelActionsException;
 import me.rampen88.customitems.listener.ParticleHandler;
 import org.bukkit.entity.Player;
 
-public abstract class PlayableAction implements ItemAction{
+public abstract class PlayableAction implements ItemAction {
 
 	int amount;
 	double offsetX;
@@ -29,7 +29,5 @@ public abstract class PlayableAction implements ItemAction{
 	}
 
 	protected abstract Playable getPlayable();
-
-
 
 }

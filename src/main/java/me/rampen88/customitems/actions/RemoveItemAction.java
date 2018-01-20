@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-public class RemoveItemAction implements ItemAction{
+public class RemoveItemAction implements ItemAction {
 
 	private ItemStack itemStack;
 	private int amountToRemove;

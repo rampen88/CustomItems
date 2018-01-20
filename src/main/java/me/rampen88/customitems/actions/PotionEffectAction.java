@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class PotionEffectAction implements ItemAction{
+public class PotionEffectAction implements ItemAction {
 
 	private PotionEffectType type;
 	private int duration;

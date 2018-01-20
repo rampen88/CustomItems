@@ -2,7 +2,6 @@ package me.rampen88.customitems.listener;
 
 import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.actions.particle.Playable;
-import me.rampen88.customitems.actions.particle.PlayableParticle;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

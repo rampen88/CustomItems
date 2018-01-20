@@ -5,7 +5,7 @@ import me.rampen88.customitems.actions.particle.Playable;
 import me.rampen88.customitems.actions.particle.PlayableParticle;
 import org.bukkit.Particle;
 
-public class ParticleAction extends PlayableAction{
+public class ParticleAction extends PlayableAction {
 
 	private Particle particle;
 	private int timesToPlay;

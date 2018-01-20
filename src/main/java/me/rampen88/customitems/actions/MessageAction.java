@@ -3,7 +3,7 @@ package me.rampen88.customitems.actions;
 import me.rampen88.customitems.exceptions.CancelActionsException;
 import org.bukkit.entity.Player;
 
-public class MessageAction implements ItemAction{
+public class MessageAction implements ItemAction {
 
 	private String message;
 
