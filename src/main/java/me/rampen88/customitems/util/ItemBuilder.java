@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -12,9 +13,9 @@ import java.util.List;
 public class ItemBuilder {
 
 
-	public ItemStack buildItem(Material m, int amount, String name, int damage, List<ItemEnchant> enchants, List<String> lore, List<ItemFlag>  flags){
+	public ItemStack buildItem(Material material, int amount, String name, int damage, List<ItemEnchant> enchants, List<String> lore, List<ItemFlag>  flags){
 
-		ItemStack item = new ItemStack(m, amount, (short)damage);
+		ItemStack item = new ItemStack(material, amount, (short)damage);
 
 		ItemMeta meta = item.getItemMeta();
 
@@ -24,7 +25,12 @@ public class ItemBuilder {
 
 
 		if(enchants != null){
-			enchants.forEach(e -> meta.addEnchant(e.getEnchantment(), e.getLevel(), true));
+			if(material == Material.ENCHANTED_BOOK){
+				EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) meta;
+				enchants.forEach(e -> storageMeta.addStoredEnchant(e.getEnchantment(), e.getLevel(), true));
+			}else{
+				enchants.forEach(e -> meta.addEnchant(e.getEnchantment(), e.getLevel(), true));
+			}
 		}
 
 		if(flags != null){
