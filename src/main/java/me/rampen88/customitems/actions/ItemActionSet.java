@@ -1,6 +1,8 @@
 package me.rampen88.customitems.actions;
 
 import me.rampen88.customitems.CustomItems;
+import me.rampen88.customitems.actions.cosmetic.EffectAction;
+import me.rampen88.customitems.actions.cosmetic.ParticleAction;
 import me.rampen88.customitems.exceptions.CancelActionsException;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -19,9 +21,11 @@ public class ItemActionSet {
 
 	private CustomItems plugin;
 	private Set<ItemAction> actionSet = new LinkedHashSet<>();
+	private String itemId;
 
-	public ItemActionSet(CustomItems plugin, List<String> actionStringList, ItemStack item) {
+	public ItemActionSet(CustomItems plugin, List<String> actionStringList, ItemStack item, String itemId) {
 		this.plugin = plugin;
+		this.itemId = itemId;
 		loadActions(actionStringList, item);
 	}
 
@@ -172,7 +176,7 @@ public class ItemActionSet {
 			return null;
 		}
 
-		return new ParticleAction(particle, amount, offX, offY, offZ, delay, timesToPlay);
+		return new ParticleAction(actionSet.size(), particle, amount, offX, offY, offZ, delay, timesToPlay, itemId);
 	}
 
 	// TODO: Don't be lazy
@@ -192,9 +196,8 @@ public class ItemActionSet {
 			return null;
 		}
 
-		return new EffectAction(effect, data, offX, offY, offZ, delay);
+		return new EffectAction(actionSet.size(), effect, data, offX, offY, offZ, delay, itemId);
 	}
-
 
 	private ItemAction getMessageAction(String[] args){
 		if(args.length < 2){

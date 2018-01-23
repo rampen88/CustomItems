@@ -1,7 +1,7 @@
 package me.rampen88.customitems.listener;
 
 import me.rampen88.customitems.CustomItems;
-import me.rampen88.customitems.crafting.ItemMaster;
+import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.crafting.SimpleItem;
 
 import org.bukkit.entity.Player;
@@ -19,10 +19,10 @@ import org.bukkit.inventory.ItemStack;
 
 public class ItemListener implements Listener{
 
-	private ItemMaster craftingMaster;
+	private ItemHandler craftingMaster;
 	private boolean attemptUpdateInv;
 
-	public ItemListener(CustomItems plugin, ItemMaster craftingMaster) {
+	public ItemListener(CustomItems plugin, ItemHandler craftingMaster) {
 		this.craftingMaster = craftingMaster;
 		attemptUpdateInv = plugin.getConfig().getBoolean("UpdateInventoryOnCancel", true);
 	}

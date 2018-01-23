@@ -1,7 +1,7 @@
 package me.rampen88.customitems.commands;
 
 import me.rampen88.customitems.CustomItems;
-import me.rampen88.customitems.crafting.ItemMaster;
+import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.crafting.SimpleItem;
 import me.rampen88.customitems.util.MiscUtil;
 import org.bukkit.Bukkit;
@@ -16,12 +16,12 @@ import java.util.List;
 public class CitemsCommand implements CommandExecutor{
 
 	private CustomItems plugin;
-	private ItemMaster itemMaster;
+	private ItemHandler itemHandler;
 	private MiscUtil util;
 
-	public CitemsCommand(CustomItems plugin, ItemMaster itemMaster) {
+	public CitemsCommand(CustomItems plugin, ItemHandler itemHandler) {
 		this.plugin = plugin;
-		this.itemMaster = itemMaster;
+		this.itemHandler = itemHandler;
 
 		util = plugin.getMiscUtil();
 	}
@@ -84,7 +84,7 @@ public class CitemsCommand implements CommandExecutor{
 	}
 
 	private void giveItem(CommandSender sender, Player target, String itemName, String amountString, boolean sendMessageToSender){
-		SimpleItem item = itemMaster.getItemByName(itemName);
+		SimpleItem item = itemHandler.getItemByName(itemName);
 		if(item == null){
 			sender.sendMessage(util.getMessage("Commands.ItemError"));
 			return;
@@ -123,7 +123,7 @@ public class CitemsCommand implements CommandExecutor{
 		StringBuilder stringBuilder = new StringBuilder();
 
 		// Append all item names in the StringBuilder, then remove the last ", "
-		itemMaster.getAllItems().forEach(i -> stringBuilder.append(i.getName()).append(", "));
+		itemHandler.getAllItems().forEach(i -> stringBuilder.append(i.getName()).append(", "));
 		stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
 
 		target.sendMessage(util.getMessage("Commands.List.Items"));

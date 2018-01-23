@@ -1,23 +1,27 @@
-package me.rampen88.customitems.actions.particle;
+package me.rampen88.customitems.actions.cosmetic.particle;
 
 import org.bukkit.entity.Player;
 
-public abstract class Playable{
+public abstract class Cosmetic {
 
 	int amount;
 	double offsetX;
 	double offsetY;
 	double offsetZ;
 	private int delay;
+	private int id;
+	private String itemId;
 
 	private int currentDelay;
 
-	Playable(int amount, double offsetX, double offsetY, double offsetZ, int delay) {
+	Cosmetic(int id, int amount, double offsetX, double offsetY, double offsetZ, int delay, String itemId) {
+		this.id = id;
 		this.amount = amount;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
 		this.offsetZ = offsetZ;
 		this.delay = delay;
+		this.itemId = itemId;
 	}
 
 	public boolean play(Player player){
@@ -27,9 +31,16 @@ public abstract class Playable{
 		}else{
 			currentDelay++;
 		}
-		return true;
+		return false;
 	}
 
 	protected abstract boolean spawn(Player player);
 
+	public int getId() {
+		return id;
+	}
+
+	public String getItemId() {
+		return itemId;
+	}
 }

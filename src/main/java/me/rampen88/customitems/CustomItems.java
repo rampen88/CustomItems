@@ -1,9 +1,9 @@
 package me.rampen88.customitems;
 
 import me.rampen88.customitems.commands.CitemsCommand;
-import me.rampen88.customitems.crafting.ItemMaster;
+import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.listener.ItemListener;
-import me.rampen88.customitems.listener.ParticleHandler;
+import me.rampen88.customitems.listener.CosmeticHandler;
 import me.rampen88.customitems.recipe.KeyRecipeCreator;
 import me.rampen88.customitems.recipe.RecipeCreator;
 import me.rampen88.customitems.util.ItemBuilder;
@@ -23,7 +23,7 @@ public class CustomItems extends JavaPlugin {
 	private static ItemBuilder itemBuilder = new ItemBuilder();
 
 	private RecipeCreator recipeCreator;
-	private ItemMaster itemMaster;
+	private ItemHandler itemHandler;
 	private MiscUtil miscUtil;
 
 	@Override
@@ -46,8 +46,8 @@ public class CustomItems extends JavaPlugin {
 		if(recipeCreator == null)
 			recipeCreator = new KeyRecipeCreator(this);
 
-		itemMaster = new ItemMaster(this, miscUtil);
-		itemMaster.loadItems();
+		itemHandler = new ItemHandler(this, miscUtil);
+		itemHandler.loadItems();
 
 		registerListeners();
 		registerCommands();
@@ -56,13 +56,13 @@ public class CustomItems extends JavaPlugin {
 	private void registerListeners(){
 		PluginManager pluginManager = getServer().getPluginManager();
 
-		pluginManager.registerEvents(new ItemListener(this, itemMaster), this);
-		pluginManager.registerEvents(new ParticleHandler(this), this);
+		pluginManager.registerEvents(new ItemListener(this, itemHandler), this);
+		pluginManager.registerEvents(new CosmeticHandler(this), this);
 	}
 
 	private void registerCommands(){
 		PluginCommand citems = getCommand("citems");
-		citems.setExecutor(new CitemsCommand(this, itemMaster));
+		citems.setExecutor(new CitemsCommand(this, itemHandler));
 		citems.setAliases(Arrays.asList("citem","customitem","customitems"));
 	}
 
@@ -83,7 +83,7 @@ public class CustomItems extends JavaPlugin {
 		return itemBuilder;
 	}
 
-	public ItemMaster getItemMaster() {
-		return itemMaster;
+	public ItemHandler getItemHandler() {
+		return itemHandler;
 	}
 }

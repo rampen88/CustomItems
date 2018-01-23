@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ItemMaster {
+public class ItemHandler {
 
 	private ItemBuilder itemBuilder = CustomItems.getItemBuilder();
 	private CustomItems plugin;
@@ -26,7 +26,7 @@ public class ItemMaster {
 
 	private HashSet<SimpleItem> items = new HashSet<>();
 
-	public ItemMaster(CustomItems plugin, MiscUtil miscUtil) {
+	public ItemHandler(CustomItems plugin, MiscUtil miscUtil) {
 		this.plugin = plugin;
 		this.miscUtil = miscUtil;
 	}
@@ -55,10 +55,10 @@ public class ItemMaster {
 			List<String> consumeActions = section.getStringList("OnConsume");
 			List<String> clickActions = section.getStringList("OnClick");
 			if(consumeActions != null)
-				simpleItem.setConsumeActions(new ItemActionSet(plugin, consumeActions, item));
+				simpleItem.setConsumeActions(new ItemActionSet(plugin, consumeActions, item, s));
 
 			if(clickActions != null)
-				simpleItem.setClickActions(new ItemActionSet(plugin, clickActions, item));
+				simpleItem.setClickActions(new ItemActionSet(plugin, clickActions, item, s));
 		}
 	}
 

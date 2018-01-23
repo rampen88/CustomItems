@@ -66,7 +66,7 @@ public class RecipeCreator{
 	private void addIngredient(String[] ingredient, int amount, ShapelessCheck recipeCheck, Consumer<MaterialData> consumer){
 		if(ingredient[1].startsWith("CI-")){
 			String[] citemString = ingredient[1].split("-");
-			SimpleItem simpleItem = citemString.length < 2 ? null : plugin.getItemMaster().getItemByName(citemString[1]);
+			SimpleItem simpleItem = citemString.length < 2 ? null : plugin.getItemHandler().getItemByName(citemString[1]);
 			if(simpleItem == null){
 				plugin.getLogger().warning("Failed to set up custom ingredient: " + ingredient[1]);
 			}else{
