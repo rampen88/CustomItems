@@ -2,6 +2,7 @@ name: CustomItems
 version: ${project.version}
 author: rampen88
 main: me.rampen88.customitems.CustomItems
+api-version: 1.13
 commands:
   citems:
     description: Its a command.

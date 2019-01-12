@@ -11,7 +11,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
-import org.bukkit.material.MaterialData;
 
 import java.util.function.Consumer;
 
@@ -55,15 +54,14 @@ public class RecipeCreator{
 			}
 
 			Integer amount = util.parseInt(ingredient[0]);
-			if(amount == null)
-				return;
-			addIngredient(ingredient, amount, recipeCheck, (data) -> recipe.addIngredient(amount, data));
+			if(amount != null)
+				addIngredient(ingredient, amount, recipeCheck, (data) -> recipe.addIngredient(amount, data));
 		});
 
 		return recipe;
 	}
 
-	private void addIngredient(String[] ingredient, int amount, ShapelessCheck recipeCheck, Consumer<MaterialData> consumer){
+	private void addIngredient(String[] ingredient, int amount, ShapelessCheck recipeCheck, Consumer<Material> consumer){
 		if(ingredient[1].startsWith("CI-")){
 			String[] citemString = ingredient[1].split("-");
 			SimpleItem simpleItem = citemString.length < 2 ? null : plugin.getItemHandler().getItemByName(citemString[1]);
@@ -71,25 +69,18 @@ public class RecipeCreator{
 				plugin.getLogger().warning("Failed to set up custom ingredient: " + ingredient[1]);
 			}else{
 				ItemStack item = simpleItem.getItem();
-				consumer.accept(item.getData());
+				consumer.accept(item.getType());
 				recipeCheck.addIngredient(new CustomItem(simpleItem), amount);
 			}
 		}else{
 			Material m = getMaterial(ingredient[1]);
-			Integer damageValue = ingredient.length < 3 ? 0 : util.parseInt(ingredient[2]);
-			// util.parseInt can return null
-			//noinspection ConstantConditions
-			if(damageValue != null || m == null){
-				consumer.accept(getMaterialData(m, damageValue));
+			if(m == null){
+				plugin.getLogger().severe("Unable to find material '" + ingredient[1] + "'. Material will be skipped for the recipe.");
+			}else{
+				consumer.accept(m);
 				recipeCheck.addIngredient(new MaterialItem(m), amount);
 			}
 		}
-	}
-
-	private MaterialData getMaterialData(Material m, int damageValue){
-		// Using item.getData() avoids the deprecated constructor for MaterialData(Material, byte)
-		ItemStack item = new ItemStack(m, 1, (short) damageValue);
-		return item.getData();
 	}
 
 	private Material getMaterial(String name){

@@ -44,7 +44,6 @@ public class ItemHandler {
 				ShapelessCheck recipeCheck = new ShapelessCheck();
 				RecipeCreator recipeCreator = plugin.getRecipeCreator();
 				Recipe recipe = section.contains("Shape") ? recipeCreator.getShapedRecipe(section, item, recipeCheck) : recipeCreator.getShapelessRecipe(section, item, recipeCheck);
-
 				simpleItem = new SpecialRecipeItem(item, section, recipeCheck);
 				plugin.getServer().addRecipe(recipe);
 			}else{

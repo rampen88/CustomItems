@@ -17,4 +17,6 @@ bin/
 target/
 *.iml
 .idea/
+/data
+/*.xml
 

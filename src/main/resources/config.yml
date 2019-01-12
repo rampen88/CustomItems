@@ -1,5 +1,6 @@
 # If getServer().getVersion() contains any of these strings, it will use a different way of
 # registering the recipes which only works on 1.11 or below.
+# Item damage will probably not work for items in 1.12 or below, use a previous version if you need that.
 VersionCheck:
   - 'MC: 1.11'
   - '1.11.2'
@@ -44,8 +45,8 @@ Items:
     Shape: ' C ,BAB, C '
 
     # Examples:
-    # Shaped: A:PUMPKIN<:optional damage value>
-    # Shapeless: 2:PUMPKIN<:optional damage value>
+    # Shaped: A:PUMPKIN
+    # Shapeless: 2:PUMPKIN
     #
     # Using custom items in recipes:
     # Examples:
@@ -53,9 +54,9 @@ Items:
     # Shapeless: '2:CI-<ItemName>'
     # The custom item you use in the recipe has to be above the item which requires it in the config!
     #
-    # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK:3 as A:INK_SACK:3
+    # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK as A:INK_SACK
     Ingredients:
-      - 'A:INK_SACK:3'
+      - 'A:COCOA_BEANS'
       - 'B:WHEAT'
       - 'C:ROTTEN_FLESH'
 
@@ -86,12 +87,32 @@ Items:
       - 'PE:CONFUSION:200:0'
       - 'PE:SLOW:100:0'
       - 'CE'
-      - 'EF:4'
-      - 'ES:6'
-    # Same as OnConsume.
+      - 'EF:2'
+      - 'ES:1'
+    # Same as OnConsume, except when you click while holding the item instead of eat.
     OnClick:
-      - 'RI:1'
       - 'PE:SLOW:300:1'
+      - 'PE:CONFUSION:200:0'
+  BetterCookie:
+    Permission: 'custom.food.bettercookie'
+    ResultItem:
+      Material: COOKIE
+      Amount: 2
+      Name: '&6Better Cookie'
+      Lore:
+        - '&7Eatable II'
+      Enchantments:
+        - 'DURABILITY,0'
+      ItemFlags:
+        - 'HIDE_ENCHANTS'
+    Shape: 'BAB'
+    Ingredients:
+      - 'A:MILK_BUCKET'
+      - 'B:CI-RottenCookie'
+    OnConsume:
+      - 'PE:SPEED:200:0'
+      - 'EF:6'
+      - 'ES:6'
 
 Messages:
   NoPermission: "&4You do not have permission to do that."
