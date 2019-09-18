@@ -14,6 +14,11 @@ public class SimpleItem {
 	private String permission;
 	private String name;
 
+	public SimpleItem(ItemStack item, String name){
+		this.item = item;
+		this.name = name;
+	}
+
 	SimpleItem(ItemStack item, ConfigurationSection section){
 		this.item = item;
 		permission = section.getString("Permission");

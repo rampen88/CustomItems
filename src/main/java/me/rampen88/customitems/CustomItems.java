@@ -1,5 +1,8 @@
 package me.rampen88.customitems;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
+import io.lumine.xikage.mythicmobs.items.MythicItem;
 import me.rampen88.customitems.commands.CitemsCommand;
 import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.listener.ItemListener;
@@ -11,16 +14,19 @@ import me.rampen88.customitems.util.MiscUtil;
 
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class CustomItems extends JavaPlugin {
 
 	private static ItemBuilder itemBuilder = new ItemBuilder();
+	private static boolean mythicMobsEnabled = false;
 
 	private RecipeCreator recipeCreator;
 	private ItemHandler itemHandler;
@@ -36,6 +42,7 @@ public class CustomItems extends JavaPlugin {
 			versionsToCheck = Collections.singletonList("MC: 1.11");
 
 		String version = getServer().getVersion();
+		mythicMobsEnabled = getServer().getPluginManager().isPluginEnabled("MythicMobs");
 
 		for(String s : versionsToCheck){
 			if(version.contains(s)){
@@ -86,4 +93,18 @@ public class CustomItems extends JavaPlugin {
 	public ItemHandler getItemHandler() {
 		return itemHandler;
 	}
+
+	public static ItemStack getMythicMobsItem(String name){
+		if(mythicMobsEnabled){
+			String itemName = name.startsWith("MI-")
+					? name.substring(3)
+					: name;
+			Optional<MythicItem> mythicItem = MythicMobs.inst().getItemManager().getItem(itemName);
+			return mythicItem.map(item -> BukkitAdapter.adapt(item.generateItemStack(1))).orElse(null);
+		}else{
+			System.out.println("[CustomItems] Attempted to get MythicMobs item " + name + " but mythic mobs is not enabled on the server?");
+		}
+		return null;
+	}
+
 }

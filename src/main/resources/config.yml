@@ -20,6 +20,7 @@ Items:
     ResultItem:
 
       # Material of the item. List of all materials: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+      # If you want the output to be an item from mythic mobs, put "MI-<name of item in mythic mobs>" instead of the material.
       Material: COOKIE
 
       # The amount of items you get when crafting this
@@ -53,6 +54,8 @@ Items:
     # Shaped: 'A:CI-<ItemName>'
     # Shapeless: '2:CI-<ItemName>'
     # The custom item you use in the recipe has to be above the item which requires it in the config!
+    #
+    # If you want to use items from MythicMobs as an ingredient, same thing as with custom items, but MI- instead of CI-.
     #
     # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK as A:INK_SACK
     Ingredients:

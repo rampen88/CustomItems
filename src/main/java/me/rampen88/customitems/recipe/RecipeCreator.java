@@ -72,6 +72,14 @@ public class RecipeCreator{
 				consumer.accept(item.getType());
 				recipeCheck.addIngredient(new CustomItem(simpleItem), amount);
 			}
+		}else if(ingredient[1].startsWith("MI-")){
+			ItemStack itemStack = CustomItems.getMythicMobsItem(ingredient[1]);
+			if(itemStack != null){
+				consumer.accept(itemStack.getType());
+				recipeCheck.addIngredient(new CustomItem(new SimpleItem(itemStack, ingredient[1])), amount);
+			}else{
+				plugin.getLogger().warning("MythicMobs Item '" + ingredient[1] + "' was not found.");
+			}
 		}else{
 			Material m = getMaterial(ingredient[1]);
 			if(m == null){

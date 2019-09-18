@@ -37,6 +37,8 @@ public class ItemHandler {
 
 			ConfigurationSection section = items.getConfigurationSection(s);
 			ItemStack item = loadItem(section.getConfigurationSection("ResultItem"));
+			if(item == null)
+				continue;
 
 			SimpleItem simpleItem;
 			// Add recipe if section contains required things.
@@ -82,6 +84,10 @@ public class ItemHandler {
 	}
 
 	private ItemStack loadItem(ConfigurationSection section){
+		String materialName = section.getString("Material", "");
+		if(materialName.startsWith("MI-")){
+			return CustomItems.getMythicMobsItem(materialName);
+		}
 		Material mat = Material.getMaterial(section.getString("Material").toUpperCase());
 		if(mat == null){
 			plugin.getLogger().info("Invalid material: " + section.getString("Material"));
