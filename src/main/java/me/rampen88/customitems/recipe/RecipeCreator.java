@@ -2,8 +2,10 @@ package me.rampen88.customitems.recipe;
 
 import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.crafting.SimpleItem;
+import me.rampen88.customitems.crafting.recipe.RecipeItem;
 import me.rampen88.customitems.crafting.recipe.item.CustomItem;
 import me.rampen88.customitems.crafting.recipe.item.MaterialItem;
+import me.rampen88.customitems.crafting.recipe.recipe.ShapedCheck;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapelessCheck;
 import me.rampen88.customitems.util.MiscUtil;
 import org.bukkit.Material;
@@ -24,10 +26,11 @@ public class RecipeCreator{
 		util = plugin.getMiscUtil();
 	}
 
-	public ShapedRecipe getShapedRecipe(ConfigurationSection section, ItemStack item, ShapelessCheck recipeCheck){
+	public ShapedRecipe getShapedRecipe(ConfigurationSection section, ItemStack item, ShapedCheck recipeCheck){
 		ShapedRecipe recipe = this.createShapedRecipe(section.getName(), item);
 		String[] shape = section.getString("Shape").split(",");
 		recipe.shape(shape);
+		recipeCheck.setShape(shape);
 
 		section.getStringList("Ingredients").forEach(s -> {
 			String[] ingredient = s.split(":");
@@ -38,7 +41,9 @@ public class RecipeCreator{
 
 			char key = ingredient[0].toCharArray()[0];
 			int amount = MiscUtil.countCharInString(key, section.getString("Shape"));
-			addIngredient(ingredient, amount, recipeCheck, (data) -> recipe.setIngredient(key, data));
+			RecipeItem recipeItem = getIngredient(ingredient, (data) -> recipe.setIngredient(key, data));
+			if(recipeItem != null)
+				recipeCheck.addIngredient(recipeItem, amount, key);
 		});
 
 		return recipe;
@@ -54,14 +59,17 @@ public class RecipeCreator{
 			}
 
 			Integer amount = util.parseInt(ingredient[0]);
-			if(amount != null)
-				addIngredient(ingredient, amount, recipeCheck, (data) -> recipe.addIngredient(amount, data));
+			if(amount != null){
+				RecipeItem recipeItem = getIngredient(ingredient, (data) -> recipe.addIngredient(amount, data));
+				if(recipeItem != null)
+					recipeCheck.addIngredient(recipeItem, amount);
+			}
 		});
 
 		return recipe;
 	}
 
-	private void addIngredient(String[] ingredient, int amount, ShapelessCheck recipeCheck, Consumer<Material> consumer){
+	private RecipeItem getIngredient(String[] ingredient, Consumer<Material> consumer){
 		if(ingredient[1].startsWith("CI-")){
 			String[] citemString = ingredient[1].split("-");
 			SimpleItem simpleItem = citemString.length < 2 ? null : plugin.getItemHandler().getItemByName(citemString[1]);
@@ -70,13 +78,13 @@ public class RecipeCreator{
 			}else{
 				ItemStack item = simpleItem.getItem();
 				consumer.accept(item.getType());
-				recipeCheck.addIngredient(new CustomItem(simpleItem), amount);
+				return new CustomItem(simpleItem);
 			}
 		}else if(ingredient[1].startsWith("MI-")){
 			ItemStack itemStack = CustomItems.getMythicMobsItem(ingredient[1]);
 			if(itemStack != null){
 				consumer.accept(itemStack.getType());
-				recipeCheck.addIngredient(new CustomItem(new SimpleItem(itemStack, ingredient[1])), amount);
+				return new CustomItem(new SimpleItem(itemStack, ingredient[1]));
 			}else{
 				plugin.getLogger().warning("MythicMobs Item '" + ingredient[1] + "' was not found.");
 			}
@@ -86,9 +94,10 @@ public class RecipeCreator{
 				plugin.getLogger().severe("Unable to find material '" + ingredient[1] + "'. Material will be skipped for the recipe.");
 			}else{
 				consumer.accept(m);
-				recipeCheck.addIngredient(new MaterialItem(m), amount);
+				return new MaterialItem(m);
 			}
 		}
+		return null;
 	}
 
 	private Material getMaterial(String name){

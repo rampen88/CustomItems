@@ -2,12 +2,13 @@ package me.rampen88.customitems.crafting.recipe.recipe;
 
 import me.rampen88.customitems.crafting.recipe.RecipeCheck;
 import me.rampen88.customitems.crafting.recipe.RecipeItem;
+import me.rampen88.customitems.inventory.CustomItemsInventoryHolder;
+import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShapelessCheck implements RecipeCheck {
@@ -33,6 +34,19 @@ public class ShapelessCheck implements RecipeCheck {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public Inventory getInventoryShowingRecipe(){
+		Inventory inventory = Bukkit.createInventory(new CustomItemsInventoryHolder(), InventoryType.WORKBENCH);
+		int current = 1;
+		for(Map.Entry<RecipeItem, Integer> recipeItemIntegerEntry : ingredients.entrySet()){
+			for(int i = 0; i < recipeItemIntegerEntry.getValue(); i++){
+				inventory.setItem(current++, recipeItemIntegerEntry.getKey().getItemStack());
+			}
+
+		}
+		return inventory;
 	}
 
 	private RecipeItem get(ItemStack toGet){

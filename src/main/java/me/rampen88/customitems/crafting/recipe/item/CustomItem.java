@@ -17,4 +17,12 @@ public class CustomItem implements RecipeItem {
 		return item.isSimilar(itemStack);
 	}
 
+	@Override
+	public ItemStack getItemStack(){
+		ItemStack itemStack = item.getItem();
+		itemStack.setAmount(1);
+		return itemStack;
+	}
+
+
 }

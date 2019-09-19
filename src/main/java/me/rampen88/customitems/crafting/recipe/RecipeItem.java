@@ -6,4 +6,6 @@ public interface RecipeItem {
 
 	boolean isSimilar(ItemStack itemStack);
 
+	ItemStack getItemStack();
+
 }

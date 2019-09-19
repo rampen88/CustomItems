@@ -17,4 +17,9 @@ public class MaterialItem implements RecipeItem {
 		return itemStack.getType() == material;
 	}
 
+	@Override
+	public ItemStack getItemStack(){
+		return new ItemStack(material);
+	}
+
 }

@@ -2,6 +2,7 @@ package me.rampen88.customitems.crafting;
 
 import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.actions.ItemActionSet;
+import me.rampen88.customitems.crafting.recipe.recipe.ShapedCheck;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapelessCheck;
 import me.rampen88.customitems.recipe.RecipeCreator;
 import me.rampen88.customitems.util.ItemBuilder;
@@ -43,9 +44,16 @@ public class ItemHandler {
 			SimpleItem simpleItem;
 			// Add recipe if section contains required things.
 			if(section.contains("Ingredients")){
-				ShapelessCheck recipeCheck = new ShapelessCheck();
 				RecipeCreator recipeCreator = plugin.getRecipeCreator();
-				Recipe recipe = section.contains("Shape") ? recipeCreator.getShapedRecipe(section, item, recipeCheck) : recipeCreator.getShapelessRecipe(section, item, recipeCheck);
+				ShapelessCheck recipeCheck;
+				Recipe recipe;
+				if(section.contains("Shape")){
+					recipeCheck = new ShapedCheck();
+					recipe = recipeCreator.getShapedRecipe(section, item, (ShapedCheck) recipeCheck);
+				}else{
+					recipeCheck = new ShapelessCheck();
+					recipe = recipeCreator.getShapelessRecipe(section, item, recipeCheck);
+				}
 				simpleItem = new SpecialRecipeItem(item, section, recipeCheck);
 				plugin.getServer().addRecipe(recipe);
 			}else{

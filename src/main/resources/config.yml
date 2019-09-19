@@ -137,3 +137,6 @@ Messages:
       - "&a/citem get <item> <amount> &7- Gives you <amount> of <item>"
       - "&a/citem give <player> <item> <amount> &7- Gives an item to player."
       - "&a/citem list &7- Lists all items"
+    View:
+      Usage: "&cIncorrect command usage. try /citem view <item name>"
+      NoRecipe: "&cThere's no item with that name, or the item does not have a recipe."

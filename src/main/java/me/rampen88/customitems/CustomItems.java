@@ -5,6 +5,7 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
 import me.rampen88.customitems.commands.CitemsCommand;
 import me.rampen88.customitems.crafting.ItemHandler;
+import me.rampen88.customitems.listener.InventoryListener;
 import me.rampen88.customitems.listener.ItemListener;
 import me.rampen88.customitems.listener.CosmeticHandler;
 import me.rampen88.customitems.recipe.KeyRecipeCreator;
@@ -27,6 +28,7 @@ public class CustomItems extends JavaPlugin {
 
 	private static ItemBuilder itemBuilder = new ItemBuilder();
 	private static boolean mythicMobsEnabled = false;
+	private static CustomItems instance;
 
 	private RecipeCreator recipeCreator;
 	private ItemHandler itemHandler;
@@ -34,6 +36,7 @@ public class CustomItems extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		instance = this;
 		saveDefaultConfig();
 		miscUtil = new MiscUtil(this);
 
@@ -65,6 +68,7 @@ public class CustomItems extends JavaPlugin {
 
 		pluginManager.registerEvents(new ItemListener(this, itemHandler), this);
 		pluginManager.registerEvents(new CosmeticHandler(this), this);
+		pluginManager.registerEvents(new InventoryListener(), this);
 	}
 
 	private void registerCommands(){
@@ -107,4 +111,7 @@ public class CustomItems extends JavaPlugin {
 		return null;
 	}
 
+	public static CustomItems getInstance(){
+		return instance;
+	}
 }
