@@ -79,7 +79,6 @@ public class CitemsCommand implements CommandExecutor{
 
 		help = util.translateColors(help);
 		help.forEach(target::sendMessage);
-
 	}
 
 	private void getCommand(Player target, String[] args){
