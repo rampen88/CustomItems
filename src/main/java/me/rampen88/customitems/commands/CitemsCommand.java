@@ -63,6 +63,12 @@ public class CitemsCommand implements CommandExecutor{
 						break;
 					viewRecipe((Player) commandSender, args);
 					break;
+				case "reload":
+					if(!util.hasPerm(commandSender, "custom.items.reload", false))
+						break;
+					plugin.reload();
+					commandSender.sendMessage(util.getMessage("Commands.Reload"));
+					break;
 				default:
 					commandSender.sendMessage(util.getMessage("UnknownCommand"));
 					break;
@@ -151,7 +157,6 @@ public class CitemsCommand implements CommandExecutor{
 		}else{
 			sender.sendMessage(util.getMessage("Commands.View.NoRecipe"));
 		}
-
 	}
 
 }

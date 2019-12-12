@@ -29,6 +29,12 @@ public class ItemHandler {
 		this.miscUtil = miscUtil;
 	}
 
+	public void reload(){
+		plugin.getServer().resetRecipes();
+		items.clear();
+		loadItems();
+	}
+
 	public void loadItems(){
 		ConfigurationSection items = plugin.getConfig().getConfigurationSection("Items");
 		for(String s : items.getKeys(false)){
@@ -66,6 +72,14 @@ public class ItemHandler {
 			if(clickActions != null)
 				simpleItem.setClickActions(new ItemActionSet(plugin, clickActions, item, s));
 		}
+	}
+
+	public Optional<SpecialRecipeItem> getRecipeItemFromRecipe(ItemStack[] matrix){
+		return items.stream()
+				.filter(simpleItem -> simpleItem instanceof SpecialRecipeItem)
+				.map(item -> (SpecialRecipeItem)item)
+				.filter(recipeItem -> recipeItem.canCraft(matrix))
+				.findFirst();
 	}
 
 	public Set<SimpleItem> getAllItems(){

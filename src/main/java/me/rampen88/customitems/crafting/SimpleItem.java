@@ -58,7 +58,11 @@ public class SimpleItem {
 	}
 
 	public boolean canCraft(ItemStack[] itemMatrix){
-		return true;
+		return false;
+	}
+
+	public ItemStack[] removeExtraItemsOnCraft(ItemStack[] matrix){
+		return null;
 	}
 
 }

@@ -68,7 +68,7 @@ public class CustomItems extends JavaPlugin {
 
 		pluginManager.registerEvents(new ItemListener(this, itemHandler), this);
 		pluginManager.registerEvents(new CosmeticHandler(this), this);
-		pluginManager.registerEvents(new InventoryListener(), this);
+		pluginManager.registerEvents(new InventoryListener(itemHandler), this);
 	}
 
 	private void registerCommands(){
@@ -80,6 +80,11 @@ public class CustomItems extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		HandlerList.unregisterAll(this);
+	}
+
+	public void reload(){
+		reloadConfig();
+		itemHandler.reload();
 	}
 
 	public RecipeCreator getRecipeCreator() {

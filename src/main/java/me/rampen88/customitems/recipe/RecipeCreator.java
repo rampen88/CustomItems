@@ -70,6 +70,7 @@ public class RecipeCreator{
 	}
 
 	private RecipeItem getIngredient(String[] ingredient, Consumer<Material> consumer){
+		int amount = ingredient.length <= 2 ? 1 : plugin.getMiscUtil().parseInt(ingredient[2]);
 		if(ingredient[1].startsWith("CI-")){
 			String[] citemString = ingredient[1].split("-");
 			SimpleItem simpleItem = citemString.length < 2 ? null : plugin.getItemHandler().getItemByName(citemString[1]);
@@ -78,13 +79,13 @@ public class RecipeCreator{
 			}else{
 				ItemStack item = simpleItem.getItem();
 				consumer.accept(item.getType());
-				return new CustomItem(simpleItem);
+				return new CustomItem(simpleItem, amount);
 			}
 		}else if(ingredient[1].startsWith("MI-")){
 			ItemStack itemStack = CustomItems.getMythicMobsItem(ingredient[1]);
 			if(itemStack != null){
 				consumer.accept(itemStack.getType());
-				return new CustomItem(new SimpleItem(itemStack, ingredient[1]));
+				return new CustomItem(new SimpleItem(itemStack, ingredient[1]), amount);
 			}else{
 				plugin.getLogger().warning("MythicMobs Item '" + ingredient[1] + "' was not found.");
 			}
@@ -94,7 +95,7 @@ public class RecipeCreator{
 				plugin.getLogger().severe("Unable to find material '" + ingredient[1] + "'. Material will be skipped for the recipe.");
 			}else{
 				consumer.accept(m);
-				return new MaterialItem(m);
+				return new MaterialItem(m, amount);
 			}
 		}
 		return null;

@@ -7,9 +7,11 @@ import org.bukkit.inventory.ItemStack;
 public class CustomItem implements RecipeItem {
 
 	private SimpleItem item;
+	private int amount;
 
-	public CustomItem(SimpleItem item) {
+	public CustomItem(SimpleItem item, int amount) {
 		this.item = item;
+		this.amount = amount;
 	}
 
 	@Override
@@ -20,7 +22,7 @@ public class CustomItem implements RecipeItem {
 	@Override
 	public ItemStack getItemStack(){
 		ItemStack itemStack = item.getItem();
-		itemStack.setAmount(1);
+		itemStack.setAmount(amount);
 		return itemStack;
 	}
 

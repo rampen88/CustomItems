@@ -44,9 +44,13 @@ public class ShapelessCheck implements RecipeCheck {
 			for(int i = 0; i < recipeItemIntegerEntry.getValue(); i++){
 				inventory.setItem(current++, recipeItemIntegerEntry.getKey().getItemStack());
 			}
-
 		}
 		return inventory;
+	}
+
+	@Override
+	public ItemStack[] removeExtraItemsOnCraft(ItemStack[] matrix){
+		return null;
 	}
 
 	private RecipeItem get(ItemStack toGet){

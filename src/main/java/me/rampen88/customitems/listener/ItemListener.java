@@ -29,7 +29,7 @@ public class ItemListener implements Listener{
 
 	@EventHandler(ignoreCancelled = true)
 	public void onCraftItem(CraftItemEvent e){
-		ItemStack item = e.getRecipe().getResult();
+		ItemStack item = e.getInventory().getResult();
 		if(item == null)
 			return;
 
@@ -42,6 +42,25 @@ public class ItemListener implements Listener{
 			if(attemptUpdateInv){
 				((Player)e.getWhoClicked()).updateInventory();
 			}
+		}else{
+			// Make a copy of the current matrix before modifying it, so that items don't get removed when cancelling the event.
+			ItemStack[] currentMatrix = e.getInventory().getMatrix();
+			ItemStack[] tempMatrix = new ItemStack[currentMatrix.length];
+			for(int i = 0; i < tempMatrix.length; i++){
+				if(currentMatrix[i] != null)
+					tempMatrix[i] = new ItemStack(currentMatrix[i]);
+			}
+			ItemStack[] newMatrix = simpleItem.removeExtraItemsOnCraft(tempMatrix);
+			if(newMatrix != null){
+				if(e.isShiftClick()){
+					e.setCancelled(true);
+					return;
+				}
+				e.getInventory().setMatrix(newMatrix);
+				if(e.getInventory().getResult() == null)
+					e.getInventory().setResult(simpleItem.getItem());
+				e.getInventory().getViewers().forEach(h -> ((Player)h).updateInventory());
+			}
 		}
 	}
 
@@ -50,7 +69,7 @@ public class ItemListener implements Listener{
 		if(event.getRecipe() == null || event.getRecipe().getResult() == null)
 			return;
 
-		SimpleItem item = craftingMaster.getItem(event.getRecipe().getResult());
+		SimpleItem item = craftingMaster.getItem(event.getInventory().getResult());
 		if(item != null){
 			CraftingInventory craftingInventory = event.getInventory();
 			ItemStack[] items = craftingInventory.getMatrix();

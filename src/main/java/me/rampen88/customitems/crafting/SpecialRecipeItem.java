@@ -27,4 +27,8 @@ public class SpecialRecipeItem extends SimpleItem{
 		return recipeCheck.getInventoryShowingRecipe();
 	}
 
+	@Override
+	public ItemStack[] removeExtraItemsOnCraft(ItemStack[] matrix){
+		return recipeCheck.removeExtraItemsOnCraft(matrix);
+	}
 }

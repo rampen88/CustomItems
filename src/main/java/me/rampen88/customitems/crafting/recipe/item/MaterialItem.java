@@ -7,9 +7,11 @@ import org.bukkit.inventory.ItemStack;
 public class MaterialItem implements RecipeItem {
 
 	private Material material;
+	private int amount;
 
-	public MaterialItem(Material material) {
+	public MaterialItem(Material material, int amount) {
 		this.material = material;
+		this.amount = amount;
 	}
 
 	@Override
@@ -19,7 +21,7 @@ public class MaterialItem implements RecipeItem {
 
 	@Override
 	public ItemStack getItemStack(){
-		return new ItemStack(material);
+		return new ItemStack(material, amount);
 	}
 
 }

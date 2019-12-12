@@ -49,6 +49,10 @@ Items:
     # Shaped: A:PUMPKIN
     # Shapeless: 2:PUMPKIN
     #
+    # If you want the shaped recipe to require more than 1 item in that specific slot, you do 'A:PUMPKIN:<AMOUNT>'
+    # Example:
+    # Shaped: A:PUMPKIN:5
+    #
     # Using custom items in recipes:
     # Examples:
     # Shaped: 'A:CI-<ItemName>'
@@ -140,3 +144,4 @@ Messages:
     View:
       Usage: "&cIncorrect command usage. try /citem view <item name>"
       NoRecipe: "&cThere's no item with that name, or the item does not have a recipe."
+    Reload: "&aAttempting to reload recipes."
