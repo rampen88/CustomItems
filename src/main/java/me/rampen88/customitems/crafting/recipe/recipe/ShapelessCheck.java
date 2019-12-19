@@ -20,8 +20,12 @@ public class ShapelessCheck implements RecipeCheck {
 	}
 
 	@Override
-	public boolean canCraft(ItemStack[] craftingMatrix) {
-		Map<ItemStack, Integer> current = Arrays.stream(craftingMatrix)
+	public boolean canCraft(ItemStack[] craftingMatrix){
+		return isRegularCraftingEnough(craftingMatrix);
+	}
+
+	private boolean isRegularCraftingEnough(ItemStack[] matrix){
+		Map<ItemStack, Integer> current = Arrays.stream(matrix)
 				.filter(Objects::nonNull)
 				.map(ItemStack::new) // Create new ItemStack objects so it doesn't set the amount of the actual ItemStack to 1.
 				.peek(key -> key.setAmount(1)) // ItemStacks with different amount of items count as different keys for the map, so set amount to 1
@@ -54,8 +58,10 @@ public class ShapelessCheck implements RecipeCheck {
 	}
 
 	private RecipeItem get(ItemStack toGet){
+		ItemStack item = new ItemStack(toGet);
+		item.setAmount(1);
 		for(Map.Entry<RecipeItem, Integer> entry : ingredients.entrySet()){
-			if(entry.getKey().isSimilar(toGet)){
+			if(entry.getKey().isSimilar(item)){
 				return entry.getKey();
 			}
 		}
