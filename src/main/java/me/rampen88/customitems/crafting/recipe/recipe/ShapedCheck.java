@@ -72,7 +72,6 @@ public class ShapedCheck extends ShapelessCheck{
 	public ItemStack[] removeExtraItemsOnCraft(ItemStack[] craftingMatrix){
 		List<List<ItemStack>> matrixShape = getListFromMatrix(craftingMatrix);
 		List<List<ItemStack>> actualShape = getListFromShape();
-
 		// Compare the shapes
 		if(matrixShape.size() != actualShape.size()){
 			return null;
@@ -102,14 +101,72 @@ public class ShapedCheck extends ShapelessCheck{
 
 	private List<List<ItemStack>> getListFromMatrix(ItemStack[] craftingMatrix){
 		List<List<ItemStack>> matrixShape = new ArrayList<>();
-		for(int i = 0; i < 9; i += 3){
-			if((i == 0 || i == 6) && isNull(craftingMatrix[i], craftingMatrix[i + 1], craftingMatrix[i + 2])){
-				continue;
+		if(craftingMatrix.length == 4){ // Crafting in the inventory
+			for(int i = 0; i < 4; i += 2){
+				if(isNull(craftingMatrix[i], craftingMatrix[i + 1])){
+					continue;
+				}
+				List<ItemStack> row = new ArrayList<>(Arrays.asList(craftingMatrix).subList(i, i + 2));
+				matrixShape.add(row);
 			}
-			List<ItemStack> row = new ArrayList<>(Arrays.asList(craftingMatrix).subList(i, i + 3));
-			matrixShape.add(row);
+			if(matrixShape.size() == 0)
+				matrixShape.add(new ArrayList<>(Arrays.asList(craftingMatrix).subList(0, 1)));
+		}else{ // Crafting with a crafting table, probably.
+			for(int i = 0; i < 9; i += 3){
+				// Basically, only check if the middle row is empty if the first row was also empty.
+				if(((i == 3 && matrixShape.size() != 1) || i == 0 || i == 6) && isNull(craftingMatrix[i], craftingMatrix[i + 1], craftingMatrix[i + 2])){
+					continue;
+				}
+				List<ItemStack> row = new ArrayList<>(Arrays.asList(craftingMatrix).subList(i, i + 3));
+				matrixShape.add(row);
+			}
+			if(matrixShape.size() == 0)
+				matrixShape.add(new ArrayList<>(Arrays.asList(craftingMatrix).subList(0, 2)));
 		}
+		// Remove any trailing NULL values in the lists.
+		for(List<ItemStack> row : matrixShape){
+			for(int j = (row.size() - 1); j >= 0; j--){
+				if(row.get(j) == null){
+					row.remove(j);
+				}else{
+					break;
+				}
+			}
+		}
+		// Get the longest row
+		int longestRow = 0;
+		for(List<ItemStack> itemStacks : matrixShape){
+			longestRow = Math.max(itemStacks.size(), longestRow);
+		}
+		// Add trailing NULLs to match the longest row
+		for(List<ItemStack> itemStacks : matrixShape){
+			while(itemStacks.size() < longestRow){
+				itemStacks.add(null);
+			}
+		}
+		removeFirstElementOfEachRowIfAllAreNull(matrixShape);
+		removeFirstElementOfEachRowIfAllAreNull(matrixShape);
 		return matrixShape;
+	}
+
+	private void removeFirstElementOfEachRowIfAllAreNull(List<List<ItemStack>> matrixShape){
+		if(matrixShape.size() == 0){
+			return;
+		}
+		for(List<ItemStack> itemStacks : matrixShape){
+			if(itemStacks.size() == 0)
+				return;
+		}
+		ItemStack item = null;
+		for(List<ItemStack> itemStacks : matrixShape){
+			if(item == null)
+				item = itemStacks.get(0);
+		}
+		if(item == null){ // All started with null
+			for(List<ItemStack> itemStacks : matrixShape){
+				itemStacks.remove(0);
+			}
+		}
 	}
 
 	private List<List<ItemStack>> getListFromShape(){
