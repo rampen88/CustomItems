@@ -105,11 +105,17 @@ public class CustomItems extends JavaPlugin {
 
 	public static ItemStack getMythicMobsItem(String name){
 		if(mythicMobsEnabled){
-			String itemName = name.startsWith("MI-")
-					? name.substring(3)
-					: name;
-			Optional<MythicItem> mythicItem = MythicMobs.inst().getItemManager().getItem(itemName);
-			return mythicItem.map(item -> BukkitAdapter.adapt(item.generateItemStack(1))).orElse(null);
+			try{
+				String itemName = name.startsWith("MI-")
+						? name.substring(3)
+						: name;
+				Optional<MythicItem> mythicItem = MythicMobs.inst().getItemManager().getItem(itemName);
+				return mythicItem.map(item -> BukkitAdapter.adapt(item.generateItemStack(1))).orElse(null);
+			}catch(Exception e){
+				e.printStackTrace();
+				getInstance().getLogger().warning("Error attempting to get item '" + name + "' from MythicMobs");
+				return null;
+			}
 		}else{
 			System.out.println("[CustomItems] Attempted to get MythicMobs item " + name + " but mythic mobs is not enabled on the server?");
 		}

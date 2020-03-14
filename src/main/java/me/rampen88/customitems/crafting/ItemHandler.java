@@ -104,8 +104,12 @@ public class ItemHandler {
 
 	private ItemStack loadItem(ConfigurationSection section){
 		String materialName = section.getString("Material", "");
+		int amount = section.getInt("Amount", 1);
 		if(materialName.startsWith("MI-")){
-			return CustomItems.getMythicMobsItem(materialName);
+			ItemStack mmItem = CustomItems.getMythicMobsItem(materialName);
+			if(mmItem != null)
+				mmItem.setAmount(amount);
+			return mmItem;
 		}
 		Material mat = Material.getMaterial(section.getString("Material").toUpperCase());
 		if(mat == null){
@@ -115,7 +119,6 @@ public class ItemHandler {
 
 		String name = section.getString("Name");
 		int damage = section.getInt("Damage", 0);
-		int amount = section.getInt("Amount", 1);
 
 		List<String> lore = section.getStringList("Lore");
 		List<ItemEnchant> itemEnchants = getItemEnchants(section.getStringList("Enchantments"));
