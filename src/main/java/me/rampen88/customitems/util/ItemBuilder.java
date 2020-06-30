@@ -1,6 +1,6 @@
 package me.rampen88.customitems.util;
 
-import net.md_5.bungee.api.ChatColor;
+import me.rampen88.rampencore.util.MessageUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +20,7 @@ public class ItemBuilder {
 		ItemMeta meta = item.getItemMeta();
 
 		// Attempt to add color to ItemName and lore
-		if(name != null) meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+		if(name != null) meta.setDisplayName(MessageUtil.translateColors(name));
 		if(lore != null) meta.setLore(translateColors(lore));
 
 
@@ -44,7 +44,7 @@ public class ItemBuilder {
 	private List<String> translateColors(List<String> lore){
 		List<String> list = new ArrayList<>();
 		for(String s : lore){
-			list.add(ChatColor.translateAlternateColorCodes('&', s));
+			list.add(MessageUtil.translateColors(s));
 		}
 		return list;
 	}

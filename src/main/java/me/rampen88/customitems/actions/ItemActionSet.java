@@ -4,6 +4,7 @@ import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.actions.cosmetic.EffectAction;
 import me.rampen88.customitems.actions.cosmetic.ParticleAction;
 import me.rampen88.customitems.exceptions.CancelActionsException;
+import me.rampen88.rampencore.util.MessageUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Particle;
@@ -11,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import sun.misc.MessageUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -210,7 +212,7 @@ public class ItemActionSet {
 			stringJoiner.add(args[i]);
 		}
 		String message = stringJoiner.toString();
-		message = ChatColor.translateAlternateColorCodes('&', message);
+		message = MessageUtil.translateColors(message);
 		return new MessageAction(message);
 	}
 
