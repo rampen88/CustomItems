@@ -1,5 +1,6 @@
 package me.rampen88.customitems.listener;
 
+import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.crafting.SimpleItem;
 import me.rampen88.customitems.crafting.SpecialRecipeItem;
@@ -51,14 +52,14 @@ public class InventoryListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void test(PrepareItemCraftEvent event){
-		ItemStack[] matrix = event.getInventory().getMatrix();
-		Optional<SpecialRecipeItem> item = itemHandler.getRecipeItemFromRecipe(matrix);
-		item.ifPresent(recipeItem -> {
-			if(viewersHavePermission(recipeItem, event.getInventory().getViewers())){
-				event.getInventory().setResult(recipeItem.getItem());
+	public void doNotDisplayItemIfLackingPermission(PrepareItemCraftEvent event){
+		ItemStack stack = event.getRecipe() == null ? null : event.getRecipe().getResult();
+		if(stack != null){
+			SimpleItem simpleItem = itemHandler.getItem(stack);
+			if(simpleItem != null && !viewersHavePermission(simpleItem, event.getViewers())){
+				event.getInventory().setResult(null);
 			}
-		});
+		}
 	}
 
 	private boolean viewersHavePermission(SimpleItem item, List<HumanEntity> permissible){

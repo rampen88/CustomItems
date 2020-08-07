@@ -31,6 +31,9 @@ public class ShapelessCheck implements RecipeCheck {
 				.peek(key -> key.setAmount(1)) // ItemStacks with different amount of items count as different keys for the map, so set amount to 1
 				.collect(Collectors.toMap(key -> key, key -> 1, (oldValue, newValue) -> ++oldValue));
 
+		if(current.size() != ingredients.size()){
+			return false;
+		}
 		for(Map.Entry<ItemStack, Integer> entry : current.entrySet()){
 			RecipeItem item = get(entry.getKey());
 			if(item == null || entry.getValue().intValue() != ingredients.get(item).intValue()){
