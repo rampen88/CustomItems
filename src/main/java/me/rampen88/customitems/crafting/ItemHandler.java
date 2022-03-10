@@ -5,11 +5,13 @@ import me.rampen88.customitems.actions.ItemActionSet;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapedCheck;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapelessCheck;
 import me.rampen88.customitems.recipe.RecipeCreator;
+import me.rampen88.customitems.recipe.RecipeWrapper;
 import me.rampen88.customitems.util.ItemBuilder;
 import me.rampen88.customitems.util.ItemEnchant;
 
 import me.rampen88.customitems.util.MiscUtil;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
@@ -30,7 +32,21 @@ public class ItemHandler {
 	}
 
 	public void reload(){
-		plugin.getServer().resetRecipes();
+		// TODO: Only remove recipes added by this plugin.
+		// plugin.getServer().resetRecipes();
+		Server server = plugin.getServer();
+		items.stream()
+					.filter(item -> item instanceof SpecialRecipeItem)
+					.map(item -> (SpecialRecipeItem)item)
+					.forEach(item -> {
+						if(item.getKey() == null)
+							return;
+						if(server.removeRecipe(item.getKey())){
+							plugin.getLogger().info("Unregistered recipe for " + item.getName());
+						}else{
+							plugin.getLogger().info("Failed to unregister recipe for " + item.getName());
+						}
+					});
 		items.clear();
 		loadItems();
 	}
@@ -49,16 +65,17 @@ public class ItemHandler {
 			if(section.contains("Ingredients")){
 				RecipeCreator recipeCreator = plugin.getRecipeCreator();
 				ShapelessCheck recipeCheck;
-				Recipe recipe;
+				RecipeWrapper<? extends Recipe> recipeWrapper;
 				if(section.contains("Shape")){
 					recipeCheck = new ShapedCheck();
-					recipe = recipeCreator.getShapedRecipe(section, item, (ShapedCheck) recipeCheck);
+					recipeWrapper = recipeCreator.getShapedRecipe(section, item, (ShapedCheck) recipeCheck);
 				}else{
 					recipeCheck = new ShapelessCheck();
-					recipe = recipeCreator.getShapelessRecipe(section, item, recipeCheck);
+					recipeWrapper = recipeCreator.getShapelessRecipe(section, item, recipeCheck);
 				}
 				simpleItem = new SpecialRecipeItem(item, section, recipeCheck);
-				plugin.getServer().addRecipe(recipe);
+				((SpecialRecipeItem)simpleItem).setKey(recipeWrapper.getKey());
+				plugin.getServer().addRecipe(recipeWrapper.getRecipe());
 			}else{
 				simpleItem = new SimpleItem(item, section);
 			}
@@ -66,10 +83,10 @@ public class ItemHandler {
 
 			List<String> consumeActions = section.getStringList("OnConsume");
 			List<String> clickActions = section.getStringList("OnClick");
-			if(consumeActions != null)
+			if(consumeActions != null && !consumeActions.isEmpty())
 				simpleItem.setConsumeActions(new ItemActionSet(plugin, consumeActions, item, s));
 
-			if(clickActions != null)
+			if(clickActions != null && !clickActions.isEmpty())
 				simpleItem.setClickActions(new ItemActionSet(plugin, clickActions, item, s));
 		}
 	}

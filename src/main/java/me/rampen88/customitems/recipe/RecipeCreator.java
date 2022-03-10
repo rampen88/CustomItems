@@ -9,6 +9,7 @@ import me.rampen88.customitems.crafting.recipe.recipe.ShapedCheck;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapelessCheck;
 import me.rampen88.customitems.util.MiscUtil;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -26,8 +27,9 @@ public class RecipeCreator{
 		util = plugin.getMiscUtil();
 	}
 
-	public ShapedRecipe getShapedRecipe(ConfigurationSection section, ItemStack item, ShapedCheck recipeCheck){
-		ShapedRecipe recipe = this.createShapedRecipe(section.getName(), item);
+	public RecipeWrapper<ShapedRecipe> getShapedRecipe(ConfigurationSection section, ItemStack item, ShapedCheck recipeCheck){
+		RecipeWrapper<ShapedRecipe> recipeWrapper = this.createShapedRecipe(section.getName(), item);
+		ShapedRecipe recipe = recipeWrapper.getRecipe();
 		String[] shape = section.getString("Shape").split(",");
 		recipe.shape(shape);
 		recipeCheck.setShape(shape);
@@ -46,11 +48,12 @@ public class RecipeCreator{
 				recipeCheck.addIngredient(recipeItem, amount, key);
 		});
 
-		return recipe;
+		return recipeWrapper;
 	}
 
-	public ShapelessRecipe getShapelessRecipe(ConfigurationSection section, ItemStack item, ShapelessCheck recipeCheck){
-		ShapelessRecipe recipe = this.createShapelessRecipe(section.getName(), item);
+	public RecipeWrapper<ShapelessRecipe> getShapelessRecipe(ConfigurationSection section, ItemStack item, ShapelessCheck recipeCheck){
+		RecipeWrapper<ShapelessRecipe> recipeWrapper = this.createShapelessRecipe(section.getName(), item);
+		ShapelessRecipe recipe = recipeWrapper.getRecipe();
 		section.getStringList("Ingredients").forEach(s -> {
 			String[] ingredient = s.split(":");
 			if(ingredient.length < 2){
@@ -66,7 +69,7 @@ public class RecipeCreator{
 			}
 		});
 
-		return recipe;
+		return recipeWrapper;
 	}
 
 	private RecipeItem getIngredient(String[] ingredient, Consumer<Material> consumer){
@@ -108,14 +111,18 @@ public class RecipeCreator{
 
 		return m;
 	}
-	// These methods are not deprecated in 1.11 or below, and they are overridden if server is running 1.12 or above.
-	@SuppressWarnings("deprecation")
-	public ShapelessRecipe createShapelessRecipe(String name, ItemStack item) {
-		return new ShapelessRecipe(item);
+	public RecipeWrapper<ShapelessRecipe> createShapelessRecipe(String name, ItemStack item) {
+		NamespacedKey key = getKey(name);
+		return new RecipeWrapper<>(key, new ShapelessRecipe(key, item));
 	}
 
-	@SuppressWarnings("deprecation")
-	public ShapedRecipe createShapedRecipe(String name, ItemStack item) {
-		return new ShapedRecipe(item);
+	public RecipeWrapper<ShapedRecipe> createShapedRecipe(String name, ItemStack item) {
+		NamespacedKey key = getKey(name);
+		return new RecipeWrapper<>(key, new ShapedRecipe(key, item));
 	}
+
+	private NamespacedKey getKey(String name){
+		return new NamespacedKey(plugin, name);
+	}
+
 }

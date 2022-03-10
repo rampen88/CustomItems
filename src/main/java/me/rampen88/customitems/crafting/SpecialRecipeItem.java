@@ -2,6 +2,7 @@ package me.rampen88.customitems.crafting;
 
 import me.rampen88.customitems.crafting.recipe.RecipeCheck;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ import java.util.Queue;
 public class SpecialRecipeItem extends SimpleItem{
 
 	private RecipeCheck recipeCheck;
+	private NamespacedKey key;
 
 	SpecialRecipeItem(ItemStack item, ConfigurationSection section, RecipeCheck recipeCheck) {
 		super(item, section);
@@ -30,5 +32,13 @@ public class SpecialRecipeItem extends SimpleItem{
 	@Override
 	public ItemStack[] removeExtraItemsOnCraft(ItemStack[] matrix){
 		return recipeCheck.removeExtraItemsOnCraft(matrix);
+	}
+
+	public NamespacedKey getKey(){
+		return key;
+	}
+
+	public void setKey(NamespacedKey key){
+		this.key = key;
 	}
 }

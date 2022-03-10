@@ -1,10 +1,3 @@
-# If getServer().getVersion() contains any of these strings, it will use a different way of
-# registering the recipes which only works on 1.11 or below.
-# Item damage will probably not work for items in 1.12 or below, use a previous version if you need that.
-VersionCheck:
-  - 'MC: 1.11'
-  - '1.11.2'
-
 # Hopefully fixes whatever this is caused by: https://i.imgur.com/QLqYAn9.gifv
 UpdateInventoryOnCancel: true
 

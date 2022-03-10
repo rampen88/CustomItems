@@ -8,7 +8,6 @@ import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.listener.InventoryListener;
 import me.rampen88.customitems.listener.ItemListener;
 import me.rampen88.customitems.listener.CosmeticHandler;
-import me.rampen88.customitems.recipe.KeyRecipeCreator;
 import me.rampen88.customitems.recipe.RecipeCreator;
 import me.rampen88.customitems.util.ItemBuilder;
 import me.rampen88.customitems.util.MiscUtil;
@@ -40,21 +39,8 @@ public class CustomItems extends JavaPlugin {
 		saveDefaultConfig();
 		miscUtil = new MiscUtil(this);
 
-		List<String> versionsToCheck = getConfig().getStringList("VersionCheck");
-		if(versionsToCheck == null)
-			versionsToCheck = Collections.singletonList("MC: 1.11");
-
-		String version = getServer().getVersion();
 		mythicMobsEnabled = getServer().getPluginManager().isPluginEnabled("MythicMobs");
-
-		for(String s : versionsToCheck){
-			if(version.contains(s)){
-				recipeCreator = new RecipeCreator(this);
-				break;
-			}
-		}
-		if(recipeCreator == null)
-			recipeCreator = new KeyRecipeCreator(this);
+		recipeCreator = new RecipeCreator(this);
 
 		itemHandler = new ItemHandler(this, miscUtil);
 		itemHandler.loadItems();
@@ -73,7 +59,7 @@ public class CustomItems extends JavaPlugin {
 
 	private void registerCommands(){
 		PluginCommand citems = getCommand("citems");
-		citems.setExecutor(new CitemsCommand(this, itemHandler));
+		citems.setExecutor(new CitemsCommand(this));
 		citems.setAliases(Arrays.asList("citem","customitem","customitems"));
 	}
 
