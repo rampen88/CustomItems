@@ -64,8 +64,13 @@ public class GiveCommand extends SubCommand{
 		ItemStack itemStack = item.getItem();
 		itemStack.setAmount(amount);
 
-		target.getInventory().addItem(itemStack);
-		target.sendMessage(util.getMessage("Commands.Received").replace("%amount%", amount.toString()).replace("%item%", item.getName()));
+		if(target.getInventory().firstEmpty() == -1){
+			target.getWorld().dropItemNaturally(target.getLocation(), itemStack);
+			target.sendMessage(util.getMessage("Commands.ReceivedFull").replace("%amount%", amount.toString()).replace("%item%", item.getName()));
+		}else{
+			target.getInventory().addItem(itemStack);
+			target.sendMessage(util.getMessage("Commands.Received").replace("%amount%", amount.toString()).replace("%item%", item.getName()));
+		}
 		if(sendMessageToSender)
 			sender.sendMessage(util.getMessage("Commands.Give.Success").replace("%amount%", amount.toString()).replace("%item%", item.getName()).replace("%player%", target.getName()));
 	}

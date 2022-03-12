@@ -121,6 +121,7 @@ Messages:
     ItemError: "&cThat item does not exist."
     NotANumber: "&cThat's not a number."
     Received: "&aYou've received %amount% %item%"
+    ReceivedFull: "&cYou've received %amount% %item%, but your inventory was full so it was dropped instead."
     List:
       Items: "&aAvailable Items:"
     Get:
