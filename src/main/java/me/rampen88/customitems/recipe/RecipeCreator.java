@@ -4,6 +4,7 @@ import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.crafting.SimpleItem;
 import me.rampen88.customitems.crafting.recipe.RecipeItem;
 import me.rampen88.customitems.crafting.recipe.item.CustomItem;
+import me.rampen88.customitems.crafting.recipe.item.CustomPotionItem;
 import me.rampen88.customitems.crafting.recipe.item.MaterialItem;
 import me.rampen88.customitems.crafting.recipe.item.PotionItem;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapedCheck;
@@ -15,6 +16,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.Arrays;
@@ -113,6 +115,21 @@ public class RecipeCreator{
 			PotionItem item = new PotionItem(type, extra.equalsIgnoreCase("extended"), extra.equalsIgnoreCase("upgraded"));
 			consumer.accept(item.getItemStack().getType());
 			return item;
+		}else if(ingredient[1].startsWith("CPOTION")){
+			if(ingredient.length < 6){
+				plugin.getLogger().severe("Unable to set up for Potion Item in recipe due to incorrect configuration. Potion will be skipped for the recipe.");
+				return null;
+			}
+			PotionEffectType type = PotionEffectType.getByName(ingredient[3]);
+			Integer duration = plugin.getMiscUtil().parseInt(ingredient[4]);
+			Integer amplifier = plugin.getMiscUtil().parseInt(ingredient[5]);
+			if(type == null || duration == null || amplifier == null){
+				plugin.getLogger().severe("Incorrect set up for potion type: " + Arrays.toString(ingredient) + ". Potion will be skipped for the recipe.");
+			}else{
+				CustomPotionItem item = new CustomPotionItem(type, duration, amplifier);
+				consumer.accept(item.getItemStack().getType());
+				return item;
+			}
 		}else{
 			Material m = getMaterial(ingredient[1]);
 			if(m == null){

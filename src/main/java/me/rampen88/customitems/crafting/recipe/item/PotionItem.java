@@ -32,6 +32,11 @@ public class PotionItem implements RecipeItem {
 
 	@Override
 	public ItemStack getItemStack(){
-		return new ItemStack(Material.POTION);
+		ItemStack item = new ItemStack(Material.POTION);
+		PotionMeta meta = (PotionMeta) item.getItemMeta();
+		PotionData data = new PotionData(type, extended, upgraded);
+		meta.setBasePotionData(data);
+		item.setItemMeta(meta);
+		return item;
 	}
 }

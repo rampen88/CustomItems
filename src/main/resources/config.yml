@@ -58,6 +58,10 @@ Items:
     # POTION - used for vanilla potions. POTION:<amount>:<PotionType>:<Extended/Upgraded>
     # For example: POTION:1:NIGHT_VISION:EXTENDED
     #
+    # CPOTION - Used for custom potions (specifically, it is intended for use with McMMO Potions.)
+    # Usage: CPOTION:<amount>:<PotionEffectType>:<Duration>:<Amplifier>
+    # For example: CPOTION:1:FAST_DIGGING:1800:1
+    #
     # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK as A:INK_SACK
     Ingredients:
       - 'A:COCOA_BEANS'
