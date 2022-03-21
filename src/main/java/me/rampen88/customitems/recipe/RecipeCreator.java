@@ -5,6 +5,7 @@ import me.rampen88.customitems.crafting.SimpleItem;
 import me.rampen88.customitems.crafting.recipe.RecipeItem;
 import me.rampen88.customitems.crafting.recipe.item.CustomItem;
 import me.rampen88.customitems.crafting.recipe.item.MaterialItem;
+import me.rampen88.customitems.crafting.recipe.item.PotionItem;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapedCheck;
 import me.rampen88.customitems.crafting.recipe.recipe.ShapelessCheck;
 import me.rampen88.customitems.util.MiscUtil;
@@ -14,7 +15,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.potion.PotionType;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class RecipeCreator{
@@ -73,7 +76,11 @@ public class RecipeCreator{
 	}
 
 	private RecipeItem getIngredient(String[] ingredient, Consumer<Material> consumer){
-		int amount = ingredient.length <= 2 ? 1 : plugin.getMiscUtil().parseInt(ingredient[2]);
+		Integer amount = ingredient.length <= 2 ? 1 : plugin.getMiscUtil().parseInt(ingredient[2]);
+		if(amount == null){
+			plugin.getLogger().warning("Unable to get amount for item: " + Arrays.toString(ingredient) + ", item will be skipped.");
+			return null;
+		}
 		if(ingredient[1].startsWith("CI-")){
 			String[] citemString = ingredient[1].split("-");
 			SimpleItem simpleItem = citemString.length < 2 ? null : plugin.getItemHandler().getItemByName(citemString[1]);
@@ -92,6 +99,20 @@ public class RecipeCreator{
 			}else{
 				plugin.getLogger().warning("MythicMobs Item '" + ingredient[1] + "' was not found.");
 			}
+		}else if(ingredient[1].startsWith("POTION")){
+			if(ingredient.length < 4){
+				plugin.getLogger().severe("Unable to set up for Potion Item in recipe due to incorrect configuration. Potion will be skipped for the recipe.");
+				return null;
+			}
+			PotionType type = getPotionType(ingredient[3]);
+			String extra = ingredient.length == 5 ? ingredient[4] : "none";
+			if(type == null){
+				plugin.getLogger().severe("Unable to set up for Potion Item due to " + ingredient[3] + " not being a valid potion type. Potion will be skipped for the recipe.");
+				return null;
+			}
+			PotionItem item = new PotionItem(type, extra.equalsIgnoreCase("extended"), extra.equalsIgnoreCase("upgraded"));
+			consumer.accept(item.getItemStack().getType());
+			return item;
 		}else{
 			Material m = getMaterial(ingredient[1]);
 			if(m == null){
@@ -102,6 +123,14 @@ public class RecipeCreator{
 			}
 		}
 		return null;
+	}
+
+	private PotionType getPotionType(String type){
+		try{
+			return PotionType.valueOf(type);
+		}catch(IllegalArgumentException e){
+			return null;
+		}
 	}
 
 	private Material getMaterial(String name){

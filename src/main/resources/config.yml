@@ -54,6 +54,10 @@ Items:
     #
     # If you want to use items from MythicMobs as an ingredient, same thing as with custom items, but MI- instead of CI-.
     #
+    # For crafting with potions, you want to use POTION and CPOTION
+    # POTION - used for vanilla potions. POTION:<amount>:<PotionType>:<Extended/Upgraded>
+    # For example: POTION:1:NIGHT_VISION:EXTENDED
+    #
     # It will only read the first character before the first ":", so the plugin will read ABB:INK_SACK as A:INK_SACK
     Ingredients:
       - 'A:COCOA_BEANS'

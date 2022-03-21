@@ -12,14 +12,14 @@ import java.util.*;
 public class ShapedCheck extends ShapelessCheck{
 
 	private String[] shape;
-	private Map<Character, ItemStack> ingredientMap = new HashMap<>();
+	private final Map<Character, RecipeItem> ingredientMap = new HashMap<>();
 
 	public void setShape(String[] shape){
 		this.shape = shape;
 	}
 
 	public void addIngredient(RecipeItem item, int amount, char key){
-		ingredientMap.put(key, item.getItemStack());
+		ingredientMap.put(key, item);
 		super.addIngredient(item, amount);
 	}
 
@@ -28,7 +28,7 @@ public class ShapedCheck extends ShapelessCheck{
 		Inventory inventory = Bukkit.createInventory(new CustomItemsInventoryHolder(), InventoryType.WORKBENCH);
 		for(int i = 0; i < shape.length; i++){
 			for(int j = 0; j < shape[i].length(); j++){
-				ItemStack itemStack = ingredientMap.get(shape[i].toCharArray()[j]);
+				ItemStack itemStack = ingredientMap.get(shape[i].toCharArray()[j]).getItemStack();
 				if(itemStack == null)
 					continue;
 				inventory.setItem(i * 3 + j + 1, itemStack);
@@ -40,24 +40,24 @@ public class ShapedCheck extends ShapelessCheck{
 	@Override
 	public boolean canCraft(ItemStack[] craftingMatrix){
 		List<List<ItemStack>> matrixShape = getListFromMatrix(craftingMatrix);
-		List<List<ItemStack>> actualShape = getListFromShape();
+		List<List<RecipeItem>> actualShape = getListFromShape();
 		// Compare the shapes
 		if(matrixShape.size() != actualShape.size()){
 			return false;
 		}else{
 			for(int i = 0; i < matrixShape.size(); i++){
 				List<ItemStack> matrixRow = matrixShape.get(i);
-				List<ItemStack> shapeRow = actualShape.get(i);
+				List<RecipeItem> shapeRow = actualShape.get(i);
 				if(matrixRow.size() != shapeRow.size()){
 					return false;
 				}else{
 					for(int j = 0; j < matrixRow.size(); j++){
 						ItemStack matrixItem = matrixRow.get(j);
-						ItemStack shapeItem = shapeRow.get(j);
+						RecipeItem shapeItem = shapeRow.get(j);
 						// If both are null, keep going through the loop.
 						if(shapeItem != null || matrixItem != null){
 							// If only one is null, or the item is not similar, it's not the correct recipe.
-							if(shapeItem == null || matrixItem == null || !shapeItem.isSimilar(matrixItem) || matrixItem.getAmount() < shapeItem.getAmount()){
+							if(shapeItem == null || matrixItem == null || !shapeItem.isSimilar(matrixItem) || matrixItem.getAmount() < shapeItem.getItemStack().getAmount()){
 								return false;
 							}
 						}
@@ -71,25 +71,26 @@ public class ShapedCheck extends ShapelessCheck{
 	@Override
 	public ItemStack[] removeExtraItemsOnCraft(ItemStack[] craftingMatrix){
 		List<List<ItemStack>> matrixShape = getListFromMatrix(craftingMatrix);
-		List<List<ItemStack>> actualShape = getListFromShape();
+		List<List<RecipeItem>> actualShape = getListFromShape();
 		// Compare the shapes
 		if(matrixShape.size() != actualShape.size()){
 			return null;
 		}else{
 			for(int i = 0; i < matrixShape.size(); i++){
 				List<ItemStack> matrixRow = matrixShape.get(i);
-				List<ItemStack> shapeRow = actualShape.get(i);
+				List<RecipeItem> shapeRow = actualShape.get(i);
 				if(matrixRow.size() != shapeRow.size()){
 					return null;
 				}else{
 					for(int j = 0; j < matrixRow.size(); j++){
 						ItemStack matrixItem = matrixRow.get(j);
-						ItemStack shapeItem = shapeRow.get(j);
+						RecipeItem shapeItem = shapeRow.get(j);
 						// If both are null, keep going through the loop.
 						if(shapeItem != null && matrixItem != null){
-							if(shapeItem.getAmount() > 1){
+							ItemStack shapeItemStack = shapeItem.getItemStack();
+							if(shapeItemStack.getAmount() > 1){
 								// Remove 1 less than what the recipe requires, since normal crafting removes 1 of each
-								matrixItem.setAmount(matrixItem.getAmount() - (shapeItem.getAmount() - 1));
+								matrixItem.setAmount(matrixItem.getAmount() - (shapeItemStack.getAmount() - 1));
 							}
 						}
 					}
@@ -169,11 +170,11 @@ public class ShapedCheck extends ShapelessCheck{
 		}
 	}
 
-	private List<List<ItemStack>> getListFromShape(){
-		List<List<ItemStack>> actualShape = new ArrayList<>();
+	private List<List<RecipeItem>> getListFromShape(){
+		List<List<RecipeItem>> actualShape = new ArrayList<>();
 		// Build a list similar to the one above, but for the actual shape
 		for(String s : shape){
-			List<ItemStack> row = new ArrayList<>();
+			List<RecipeItem> row = new ArrayList<>();
 			for(char c : s.toCharArray()){
 				row.add(ingredientMap.get(c));
 			}
