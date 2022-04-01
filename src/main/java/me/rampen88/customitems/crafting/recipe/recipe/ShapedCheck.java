@@ -74,6 +74,7 @@ public class ShapedCheck extends ShapelessCheck{
 		List<List<ItemStack>> matrixShape = getListFromMatrix(craftingMatrix);
 		List<List<RecipeItem>> actualShape = getListFromShape();
 		// Compare the shapes
+		boolean modifiedMatrix = false;
 		if(matrixShape.size() != actualShape.size()){
 			return null;
 		}else{
@@ -92,13 +93,16 @@ public class ShapedCheck extends ShapelessCheck{
 							if(shapeItemStack.getAmount() > 1){
 								// Remove 1 less than what the recipe requires, since normal crafting removes 1 of each
 								matrixItem.setAmount(matrixItem.getAmount() - (shapeItemStack.getAmount() - 1));
+								modifiedMatrix = true;
 							}
 						}
 					}
 				}
 			}
 		}
-		return craftingMatrix;
+		return modifiedMatrix
+			? craftingMatrix
+			: null;
 	}
 
 	private List<List<ItemStack>> getListFromMatrix(ItemStack[] craftingMatrix){
