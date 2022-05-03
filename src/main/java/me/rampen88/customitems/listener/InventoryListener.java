@@ -5,6 +5,7 @@ import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.crafting.SimpleItem;
 import me.rampen88.customitems.crafting.SpecialRecipeItem;
 import me.rampen88.customitems.inventory.CustomItemsInventoryHolder;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -56,7 +57,7 @@ public class InventoryListener implements Listener {
 		ItemStack stack = event.getRecipe() == null ? null : event.getRecipe().getResult();
 		if(stack != null){
 			SimpleItem simpleItem = itemHandler.getItem(stack);
-			if(simpleItem != null && !viewersHavePermission(simpleItem, event.getViewers())){
+			if(simpleItem != null && ItemListener.recipeMatches(simpleItem, event.getRecipe()) && !viewersHavePermission(simpleItem, event.getViewers())){
 				event.getInventory().setResult(null);
 			}
 		}

@@ -4,6 +4,8 @@ import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.crafting.ItemHandler;
 import me.rampen88.customitems.crafting.SimpleItem;
 
+import me.rampen88.customitems.crafting.SpecialRecipeItem;
+import org.bukkit.Keyed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,6 +18,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 public class ItemListener implements Listener{
 
@@ -70,7 +73,7 @@ public class ItemListener implements Listener{
 			return;
 
 		SimpleItem item = craftingMaster.getItem(event.getInventory().getResult());
-		if(item != null){
+		if(item != null && recipeMatches(item, event.getRecipe())){
 			CraftingInventory craftingInventory = event.getInventory();
 			ItemStack[] items = craftingInventory.getMatrix();
 			if(!item.canCraft(items)){
@@ -78,6 +81,7 @@ public class ItemListener implements Listener{
 			}
 		}
 	}
+
 
 	@EventHandler
 	public void onItemClick(PlayerInteractEvent event){
@@ -106,4 +110,12 @@ public class ItemListener implements Listener{
 		}
 	}
 
+	public static boolean recipeMatches(SimpleItem simpleItem, Recipe recipe){
+		if(recipe instanceof Keyed && simpleItem instanceof SpecialRecipeItem){
+			Keyed key = (Keyed) recipe;
+			SpecialRecipeItem item = (SpecialRecipeItem) simpleItem;
+			return key.getKey().equals(item.getKey());
+		}
+		return true;
+	}
 }
