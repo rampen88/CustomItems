@@ -37,7 +37,7 @@ public class ItemListener implements Listener{
 			return;
 
 		SimpleItem simpleItem = craftingMaster.getItem(item);
-		if(simpleItem == null)
+		if(simpleItem == null || !recipeMatches(simpleItem, e.getRecipe()))
 			return;
 
 		if(!simpleItem.hasPermission(e.getWhoClicked()) || !simpleItem.canCraft(e.getInventory().getMatrix())){
