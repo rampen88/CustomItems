@@ -81,6 +81,9 @@ Items:
     # Message Player: 'MP:<Message>' (Placeholders: %player% for the player name.)
     # Play Sound: 'PS:<Sound>:<Volume>:<Pitch>'
     #
+    # Plugins Hooks:
+    # Brewery Remove Drunkenness: 'RD:<amount>' (Removes <amount> of drunkenness from the player, if Brewery is present and the player is drunk)
+    #
     # Potion Effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
     # Sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
     # Particles: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Particle.html

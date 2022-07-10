@@ -5,14 +5,12 @@ import me.rampen88.customitems.actions.cosmetic.EffectAction;
 import me.rampen88.customitems.actions.cosmetic.ParticleAction;
 import me.rampen88.customitems.exceptions.CancelActionsException;
 import me.rampen88.rampencore.util.MessageUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
-import sun.misc.MessageUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -84,6 +82,10 @@ public class ItemActionSet {
 					break;
 				case "PS":
 					toAdd = getSoundAction(action);
+					break;
+				case "BREWERY-RD":
+				case "RD":
+					toAdd = getBreweryRemoveDrunknessAction(action);
 					break;
 				default:
 					plugin.getLogger().info("Unknown item action: " + action[0]);
@@ -227,6 +229,19 @@ public class ItemActionSet {
 		double pitch  = plugin.getMiscUtil().parseDouble(args[3]);
 
 		return new SoundAction(sound, (float) volume, (float)pitch);
+	}
+
+	private ItemAction getBreweryRemoveDrunknessAction(String[] args){
+		if(plugin.getBreweryHook() == null){
+			plugin.getLogger().warning("Tried to load Brewery dependant action, but brewery hook was not found!");
+		}else if(args.length > 1){
+			Integer amount = plugin.getMiscUtil().parseInt(args[1]);
+			boolean showDrunkenness = args.length <= 2 || Boolean.getBoolean(args[2]);
+			return amount != null ? new BreweryRemoveDrunkennessAction(plugin.getBreweryHook(), amount, showDrunkenness) : null;
+		}else{
+			plugin.getLogger().info("Invalid brewery remove drunkness action, missing arguments");
+		}
+		return null;
 	}
 
 }

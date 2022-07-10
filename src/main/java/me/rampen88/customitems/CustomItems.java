@@ -5,6 +5,7 @@ import io.lumine.xikage.mythicmobs.adapters.bukkit.BukkitAdapter;
 import io.lumine.xikage.mythicmobs.items.MythicItem;
 import me.rampen88.customitems.commands.CitemsCommand;
 import me.rampen88.customitems.crafting.ItemHandler;
+import me.rampen88.customitems.hooks.BreweryHook;
 import me.rampen88.customitems.listener.InventoryListener;
 import me.rampen88.customitems.listener.ItemListener;
 import me.rampen88.customitems.listener.CosmeticHandler;
@@ -31,6 +32,7 @@ public class CustomItems extends JavaPlugin {
 
 	private RecipeCreator recipeCreator;
 	private ItemHandler itemHandler;
+	private BreweryHook breweryHook;
 	private MiscUtil miscUtil;
 
 	@Override
@@ -40,6 +42,9 @@ public class CustomItems extends JavaPlugin {
 		miscUtil = new MiscUtil(this);
 
 		mythicMobsEnabled = getServer().getPluginManager().isPluginEnabled("MythicMobs");
+		if(getServer().getPluginManager().isPluginEnabled("Brewery")){
+			breweryHook = new BreweryHook();
+		}
 		recipeCreator = new RecipeCreator(this);
 
 		itemHandler = new ItemHandler(this, miscUtil);
@@ -87,6 +92,10 @@ public class CustomItems extends JavaPlugin {
 
 	public ItemHandler getItemHandler() {
 		return itemHandler;
+	}
+
+	public BreweryHook getBreweryHook(){
+		return breweryHook;
 	}
 
 	public static ItemStack getMythicMobsItem(String name){
