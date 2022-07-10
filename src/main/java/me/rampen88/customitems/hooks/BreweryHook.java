@@ -11,7 +11,6 @@ public class BreweryHook {
 		if(p != null && p.getDrunkeness() > 0){
 			amount = Math.max(p.getDrunkeness() - amount, 0);
 			BreweryApi.setPlayerDrunk(player, amount, p.getQuality());
-			p.showDrunkeness(player);
 			return true;
 		}
 		return false;

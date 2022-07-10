@@ -1,5 +1,6 @@
 package me.rampen88.customitems.actions;
 
+import me.rampen88.customitems.CustomItems;
 import me.rampen88.customitems.exceptions.CancelActionsException;
 import me.rampen88.customitems.hooks.BreweryHook;
 import org.bukkit.entity.Player;

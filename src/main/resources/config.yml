@@ -82,7 +82,7 @@ Items:
     # Play Sound: 'PS:<Sound>:<Volume>:<Pitch>'
     #
     # Plugins Hooks:
-    # Brewery Remove Drunkenness: 'RD:<amount>' (Removes <amount> of drunkenness from the player, if Brewery is present and the player is drunk)
+    # Brewery Remove Drunkenness: 'RD:<amount>:<show drunkenness>' (Removes <amount> of drunkenness from the player, if Brewery is present and the player is drunk. Show drunkenness defaults to true if its not present)
     #
     # Potion Effects: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/potion/PotionEffectType.html
     # Sounds: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html

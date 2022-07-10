@@ -85,7 +85,7 @@ public class ItemActionSet {
 					break;
 				case "BREWERY-RD":
 				case "RD":
-					toAdd = getBreweryRemoveDrunknessAction(action);
+					toAdd = getBreweryRemoveDrunkennessAction(action);
 					break;
 				default:
 					plugin.getLogger().info("Unknown item action: " + action[0]);
@@ -231,12 +231,12 @@ public class ItemActionSet {
 		return new SoundAction(sound, (float) volume, (float)pitch);
 	}
 
-	private ItemAction getBreweryRemoveDrunknessAction(String[] args){
+	private ItemAction getBreweryRemoveDrunkennessAction(String[] args){
 		if(plugin.getBreweryHook() == null){
 			plugin.getLogger().warning("Tried to load Brewery dependant action, but brewery hook was not found!");
 		}else if(args.length > 1){
 			Integer amount = plugin.getMiscUtil().parseInt(args[1]);
-			boolean showDrunkenness = args.length <= 2 || Boolean.getBoolean(args[2]);
+			boolean showDrunkenness = args.length <= 2 || Boolean.parseBoolean(args[2]);
 			return amount != null ? new BreweryRemoveDrunkennessAction(plugin.getBreweryHook(), amount, showDrunkenness) : null;
 		}else{
 			plugin.getLogger().info("Invalid brewery remove drunkness action, missing arguments");
