@@ -23,9 +23,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CustomItems extends JavaPlugin {
 
+	private static Logger logger;
 	private static ItemBuilder itemBuilder = new ItemBuilder();
 	private static boolean mythicMobsEnabled = false;
 	private static CustomItems instance;
@@ -52,6 +55,7 @@ public class CustomItems extends JavaPlugin {
 
 		registerListeners();
 		registerCommands();
+		setLoggerLevel();
 	}
 
 	private void registerListeners(){
@@ -75,7 +79,20 @@ public class CustomItems extends JavaPlugin {
 
 	public void reload(){
 		reloadConfig();
+		setLoggerLevel();
 		itemHandler.reload();
+	}
+
+	public void setLoggerLevel(){
+		String llevel = getConfig().getString("LoggerLevel", "warning");
+		try{
+			Level lvl = Level.parse(llevel);
+			getLogger().setLevel(lvl);
+			Logger.getLogger("[CustomItems]").info("Logger level set to: " + lvl);
+		}catch(NullPointerException | IllegalArgumentException e){
+			getLogger().setLevel(Level.WARNING);
+			getLogger().warning("Invalid Logger Level in config, setting it to Warning. (900)");
+		}
 	}
 
 	public RecipeCreator getRecipeCreator() {

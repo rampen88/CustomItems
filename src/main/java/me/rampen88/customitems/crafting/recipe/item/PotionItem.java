@@ -23,9 +23,13 @@ public class PotionItem implements RecipeItem {
 	@Override
 	public boolean isSimilar(ItemStack itemStack){
 		if(itemStack.getItemMeta() instanceof PotionMeta){
+			CustomItems.getInstance().getLogger().info("Crafting Table Potion Item:" + itemStack);
+			CustomItems.getInstance().getLogger().info("Config Potion Item:" + getItemStack());
 			PotionMeta meta = (PotionMeta) itemStack.getItemMeta();
 			PotionData baseData = meta.getBasePotionData();
-			return baseData.getType() == type && baseData.isExtended() == extended && baseData.isUpgraded() == upgraded;
+			boolean isSimilar = baseData.getType() == type && baseData.isExtended() == extended && baseData.isUpgraded() == upgraded;
+			CustomItems.getInstance().getLogger().info("Base Potion is similar: " + isSimilar);
+			return isSimilar;
 		}
 		return false;
 	}
