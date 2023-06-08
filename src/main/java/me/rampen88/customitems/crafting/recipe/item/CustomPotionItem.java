@@ -7,8 +7,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
-import javax.naming.NameAlreadyBoundException;
-
 public class CustomPotionItem extends PotionItem{
 
 	private PotionEffectType type;

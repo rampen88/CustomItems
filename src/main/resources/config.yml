@@ -79,6 +79,7 @@ Items:
     # Particle Trail: 'PT:<Particle>:<ParticleAmount>:<OffsetX>:<OffsetY>:<OffsetZ>:<Delay>:<Optional: TimesToPlay>' (Don't include TimesToPlay for it to run until the player reactivates the item, or leaves the server.)
     # Effect Trail: 'ET:<Effect>:<Data>:<OffsetX>:<OffsetY>:<OffsetZ>:<Delay>'
     # Message Player: 'MP:<Message>' (Placeholders: %player% for the player name.)
+    # Dispatch Command: 'DC:<console true/false>:<command>' (Placeholders: %player& for the player name.)
     # Play Sound: 'PS:<Sound>:<Volume>:<Pitch>'
     #
     # Plugins Hooks:

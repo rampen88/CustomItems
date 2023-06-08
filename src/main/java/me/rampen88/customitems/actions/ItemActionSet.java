@@ -83,6 +83,10 @@ public class ItemActionSet {
 				case "PS":
 					toAdd = getSoundAction(action);
 					break;
+				case "CMD":
+				case "DC":
+					toAdd = getCommandAction(action);
+					break;
 				case "BREWERY-RD":
 				case "RD":
 					toAdd = getBreweryRemoveDrunkennessAction(action);
@@ -216,6 +220,20 @@ public class ItemActionSet {
 		String message = stringJoiner.toString();
 		message = MessageUtil.translateColors(message);
 		return new MessageAction(message);
+	}
+
+	private ItemAction getCommandAction(String[] args){
+		if(args.length < 3){
+			plugin.getLogger().info("Invalid command, missing arguments");
+			return null;
+		}
+		boolean console = Boolean.parseBoolean(args[1]);
+		StringJoiner stringJoiner = new StringJoiner(":");
+		for (int i = 2; i < args.length; i++) {
+			stringJoiner.add(args[i]);
+		}
+		String command = stringJoiner.toString();
+		return new CommandAction(command, console);
 	}
 
 	private ItemAction getSoundAction(String[] args){
